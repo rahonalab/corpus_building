@@ -10,11 +10,11 @@
 
 0. If you are on a system without the stanzacuda image i.e., your laptop first clone this repository:
 
-``` git clone https://github.com/rahonalab/parallelcorpus-tools.git '''
+```git clone https://github.com/rahonalab/parallelcorpus-tools.git'''
 
 Then, build the stanzacuda image:
 
-``` cd parallelcorpus-tools/stanza-cuda; docker build '''
+```cd parallelcorpus-tools/stanza-cuda; docker build'''
 
 1. Once you have a stanzacuda image available on your system, you can create a container:
 
