@@ -10,7 +10,7 @@
 
 0. If you are on a system without the stanzacuda image i.e., your laptop first clone this repository:
 
-```bash
+```git
 git clone https://github.com/rahonalab/parallelcorpus-tools.git
 ```
 
@@ -34,7 +34,7 @@ mkdir -p <corpus>/{conllu,metadata,xml}
 
 3. Finally, you can run the parsing script with:
 
-```docker
+```bash
 docker exec -it <the_name_of_your_container> python3 /tools/ud-stanza-other.py -s <container_path_to_raw_texts> -t <container_path_to_conllu_files> -m <container_path_to_metadata_files> -l <language_model_in_iso6639-1> -p tokenize,lemma,pos,depparse -c <corpus: rsc>
 ```
 
