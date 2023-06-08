@@ -1,0 +1,83 @@
+Three types of parser (in reverse diachronic order)
+
+
+1a. Parser based un UDpipe 1
+
+#set Lang
+export LANG="Language"
+
+#create dir
+mkdir -p CIEP_humanref/{metadata,conllu,xml}/$LANG
+
+#clean all text files & extract metadata | udpipe
+for file in CIEP_local/src/$LANG/*.txt; do python3 tools/process/reafromraw.py -f $file -m CIEP_humanref/metadata/$LANG/  | udpipe /Users/utw/Desktop/linguistics/saarbruecken/parallelcorpusbuilding/models/$LANG.udpipe --input=horizontal --output=conllu --outfile=CIEP_humanref/conllu/$LANG/$(basename "${file%.*}").conllu --tag --parse --tokenize; done
+
+It outputs distinct conllu files, one for each book
+
+#generate xml files
+for file in CIEP_humanref/conllu/$LANG/*.conllu; do python3 tools/process/conllu2vrt.py -c $file -m CIEP_humanref/metadata/$LANG/ -x CIEP_humanref/xml/$LANG/; done
+
+OR
+
+#generate xml files plus annotate for human reference with propn_ list
+for file in CIEP_humanref/conllu/$LANG/*.conllu; do python3 tools/conllu2vrt.py -c $file -m CIEP_humanref/metadata/$LANG/ -x CIEP_humanref/xml/$LANG/ -a ../humanRef/data/freq_list/$LANG/propn_$LANG.txt; done
+
+#OPTIONAL: annotate for surprisal
+#cat all in single file and delete in-between XML headings:
+cat *.vrt > ciep_russian.vrt
+#run the surprisal script
+/data/resources/Corpora/bin/genzelcharniak-vrt_v0.2.1_forCIEP.pl --nocross ciep_russian.vrt ciep_russian_srp.vrt
+
+#encode into cwb (without surprisal)
+cwb-encode -F /var/corpora/xml/$LANG -d /var/corpora/ciep_$LANG/ -c utf8 -R /usr/local/share/cwb/registry/ciep_$LANG -xsB -S text:0+id+origtitle+language -S s:0 -N id -P lemma -P upos -P xpos -P feats -P head -P deprel -P deps -P misc
+
+OR
+
+#encode into cwb (with surprisal)
+cwb-encode -f /var/corpora/xml/ciep_$LANG_srp.vrt -d /var/corpora/ciep_$LANG/ -c utf8 -R /usr/local/share/cwb/registry/ciep_$LANG -xsB -S text:0+id+origtitle+language -S s:0+docsrp -N id -P lemma -P upos -P xpos -P feats -P head -P deprel -P deps -P misc -P docsrp
+
+
+
+
+2. Parsed based on spacy_udpipe + nltk sentence splitting (used for paper1 and positional paper on Linguistics)
+
+#Parse file with ud-ciep.py
+python3 ud-ciep.py --parse
+
+It outputs a single conllu file
+
+#encode the conllu file into cwb (example: greek ciep)
+cwb-encode -f treebanks/UD/UD_Greek-GDT/el_gdt-ud-train.conllu -d /var/corpora/el_ciep/ -c utf8 -R /usr/local/share/cwb/registry/el_ciep -xsB -N id -L s -P lemma -P upos -P xpos -P feats -P head -P deprel -P deps -P misc
+
+3. Parser based on Treetagger (language-specific, outdated, but useful for corpus alignment)
+#Pipeline for corpus building (CWB)
+#SR= source language, TG= target language
+
+#Take *all* the txt files and convert to xml, with sentence splitting
+./xmlize.py dutch HP/src/Dutch/ HP/xml/nl/
+
+#Tokenize, PoS-tag and lemmatize XML files in vertical file format:
+#note to myself: for xml; then tree-tagger?
+./treetagger.py nl dutch.par HP/xml/nl/ HP/vrt/nl/
+
+#Alternative, pos-tag and lemmatize with freeling
+/sentence.py ../HP_source/French/Potter1_FR.txt french | analyze -f myconfig.cfg --outlv tagged > ~/Desktop/computerscience/docker/CQPweb-docker/testing-container/cqpweb/upload/Potter1.fr.vrt
+
+#Corpus encoding with CWB: take *ALL* vrt files for language, clean them and concatenate in a file
+mkdir -d /var/corpora/potter_sr
+./pre.py HP/vrt/nl | cwb-encode -d /var/corpora/potter_sr -c utf8  -R /usr/local/share/cwb/registry/potter_sr -xsB -P pos -P lemma -V s+id -V book+origauthor+author+origtitle+title+year+translation+translationyear+language+source+origlanguage -0 BLOCK -0 body
+
+cwb-make POTTER_SR
+
+#Corpus alignment with CWB
+cwb-align -o potter1SR_TG.align potter1_SR potter1_TG s
+
+#Encode corpus alignment SOURCE on TARGET
+cwb-regedit POTTER1_SR :add :a potter1_tg
+cwb-align-encode -D potter1SR_TG.align
+
+#Reverse: TARGET on SOURCE
+cwb-regedit POTTER1_SR :add :a potter1_tg
+cwb-align-encode -D -R potter1SR_TG.align
+
+

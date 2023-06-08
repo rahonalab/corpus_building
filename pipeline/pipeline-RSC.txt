@@ -1,0 +1,8 @@
+1b. Parser based on UDpipe plus sentence splitting and tokenization by Stanford (used for paper(s) with Pauline)
+
+#Use Mahmood's script to extract documents from the big file
+python3 extract_english_documents.py
+
+find . -type f -name "RSC/english_documents/*.vrt" -print0 | while IFS= read -r -d '' file; do python3 tools/parse/readfromxml.py -f $file | udpipe /Users/utw/Desktop/linguistics/saarbruecken/parallelcorpusbuilding/models/English.udpipe --input=vertical --output=conllu --outfile=RSC/conllu/English/$(basename "${file%.*}").conllu --tag --parse; done
+
+

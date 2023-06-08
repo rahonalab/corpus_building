@@ -1,0 +1,17 @@
+1a. Pipeline for CLMET
+
+#set Lang
+export LANG="English"
+
+#create dir
+mkdir -p CLMET/{metadata,conllu,xml}/$LANG
+
+#clean all text files & extract metadata | udpipe
+for file in /data/resources/Corpora/CLMET3.1/clmet/corpus/txt/plain/*.txt; do python3 tools/process/readfromxml-CLMET.py -f $file -m CLMET/metadata/$LANG/  | udpipe/src/udpipe  models/$LANG.udpipe --input=horizontal --output=conllu --outfile=CLMET/conllu/$LANG/$(basename "${file%.*}").conllu --tag --parse ; done
+
+It outputs distinct conllu files, one for each book
+
+#generate xml files
+for file in CLMET/conllu/*.conllu; do python3 tools/process/conllu2vrt.py -c $file -m CLMET/metadata/ -x CLMET/xml/; done
+
+

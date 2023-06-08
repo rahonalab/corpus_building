@@ -1,0 +1,10 @@
+1a. Pipeline for DTA
+#create dir
+mkdir -p DTA/{src/metadata,conllu,xml}
+
+#extract texts from single file
+python3 ../tools/extractText.py -f /home/pauline/DTA_SCI_GS_new_full.vrt
+
+#clean all text files & extract metadata | udpipe
+for file in DTA/src/*.vrt; do python3 ../parallelcorpusbuilding/tools/readfromxml-DTA.py -f $file -m DTA/metadata/ | awk '{print $5}' | udpipe models/German.udpipe --input=vertical --output=conllu --outfile=DTA/conllu/$LANG/$(basename "${file%.*}").conllu --tag --parse; done
+
