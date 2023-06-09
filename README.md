@@ -11,7 +11,7 @@
 0. If you are on a system without the stanzacuda image i.e., your laptop first clone this repository:
 
 ```git
-git clone https://github.com/rahonalab/parallelcorpus-tools.git
+git clone https://github.com/rahonalab/corpus_building.git
 ```
 
 Then, build the stanzacuda image:
