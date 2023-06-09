@@ -1,6 +1,6 @@
 # Stanford stanza with GPU support (pytorch/cuda)
-FROM pytorch/pytorch:latest
-#FROM pytorch/pytorch:1.9.0-cuda11.1-cudnn8-devel
+#FROM pytorch/pytorch:latest
+FROM pytorch/pytorch:1.9.0-cuda11.1-cudnn8-devel
 #FROM tensorflow/tensorflow:latest-gpu
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
 #RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub
