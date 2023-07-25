@@ -87,7 +87,7 @@ def main():
             header.remove('@endheader')
         except:
             pass
-        metadata= open(args.metadata+Path(filename).stem+".metadata","w+")
+        metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
         if header: 
             title=Path(filename).stem.split("_")[0]
             metadata.write("<text id=\""+title+"\" ")

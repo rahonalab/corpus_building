@@ -10,6 +10,7 @@ import collections
 import string
 import inspect
 import stanza
+import logging
 from pathlib import Path
 
 
@@ -80,7 +81,6 @@ def main():
     args = parser.parse_args()
     ud = args.model
     corpus = args.corpus
-
     '''Check arguments'''    
     if check_args(args) is False:
      sys.stderr.write("There was a problem validating the arguments supplied. Please check your input and try again. Exiting...\n")
@@ -93,7 +93,7 @@ def main():
         print("Reading: "+filename)
         if args.metadata:
             '''extract metadata from filename...'''
-            metadata= open(args.metadata+Path(filename).stem+".metadata","w+")
+            metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
             lang=Path(filename).stem.split("_")[1]
             title=Path(filename).stem.split("_")[0]
             metadata.write("<text id=\""+title+"\" ")
