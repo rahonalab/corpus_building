@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
 #This function prepares the NLP pipeline
-def preparenlp(model,processors,corpus):
+def preparenlp(model,processors):
     if model == "test": 
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")

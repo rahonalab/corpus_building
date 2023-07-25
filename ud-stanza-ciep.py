@@ -77,7 +77,7 @@ def main():
     start_time = time.time()
     import platform
     '''Try to load the model into the parser'''
-    nlp = preparenlp(ud,args.processors,args.corpus)
+    nlp = preparenlp(ud,args.processors)
     for filename in sorted(glob.glob(args.source+'/*.txt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)
