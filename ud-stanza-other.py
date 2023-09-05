@@ -17,7 +17,8 @@ from pathlib import Path
 
 from parsing.stanza_parser import (
     parseother,
-    parseprepared
+    parseprepared,
+    preparenlpconf
 )
         
 
@@ -87,7 +88,16 @@ def main():
      sys.exit(1)
     '''Unknown function, I'll check it later''' 
     start_time = time.time()
-    '''Try to load the model into the parser'''
+    '''Prepare NLP pipeline config'''
+    config = preparenlpconf(ud,args.processors)
+    #Generic conllu
+    if corpus == "conllu":
+        for filename in sorted(glob.glob(args.source+'/*.conllu')):
+            print("Reading: "+filename)
+            nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
+            from stanza.utils.conll import CoNLL
+            doc = CoNLL.conll2doc(filename)
+            parseprepared(nlp,doc,filename,args.target)
     for filename in sorted(glob.glob(args.source+'/*.vrt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)
@@ -106,7 +116,7 @@ def main():
             file_content = re.sub(r'\d+\t','',file_content)
         if corpus == "rsc":
             #RSC is already tokenized and sentence splitted
-            nlp = stanza.Pipeline(lang=ud, processors=args.processors, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
+            nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
             #We overwrite existing metadata as RSC's metadata are better
             rsc, metadata = importRSC(file_content)
             '''extract metadata from metadata...'''

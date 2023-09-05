@@ -12,7 +12,7 @@ import string
 from pathlib import Path
 
 from parsing.stanza_parser import (
-    preparenlp,
+    preparenlpconf,
     parseciep
 )
 
@@ -76,8 +76,9 @@ def main():
     '''Unknown function, I'll check it later''' 
     start_time = time.time()
     import platform
-    '''Try to load the model into the parser'''
-    nlp = preparenlp(ud,args.processors)
+    '''Prepare config for the NLP pipeline'''
+    config = preparenlpconf(ud,args.processors)
+    nlp = stanza.Pipeline(**config,logging_level="DEBUG") # Initialize the pipeline using a configuration dict
     for filename in sorted(glob.glob(args.source+'/*.txt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)

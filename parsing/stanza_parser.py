@@ -20,8 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
 #This function prepares the NLP pipeline
-def preparenlp(model,processors):
-    if model == "test": 
+def preparenlpconf(model,processors):
+    #Build a simple config
+    config= {'processors':processors,'lang':model}
+    if model == "mine": 
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")
             mwt = input("Mwt model: ")
@@ -29,9 +31,7 @@ def preparenlp(model,processors):
             lemma = input("Lemma model: ")
             depparse = input("Depparse model: ")
             pretrain = input("Pretrain: ")
-            config = {
-                        # Comma-separated list of processors to use
-	                    'processors': 'tokenize,pos,lemma,depparse',
+            config.update({
                         # Language code for the language to build the Pipeline in
                         'lang': 'fr',
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
@@ -42,11 +42,8 @@ def preparenlp(model,processors):
 	                    'depparse_model_path': modelpath+"/depparse/"+depparse,
                         'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
-                        }
-            nlp = stanza.Pipeline(**config,logging_level="DEBUG") # Initialize the pipeline using a configuration dict
-    else:
-            nlp = stanza.Pipeline(lang=model, logging_level="DEBUG", processors=processors)         
-    return nlp
+                        })
+    return config
 
 
 #This functions is dedicated to the parsing of CIEP+...
