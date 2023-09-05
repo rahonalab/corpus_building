@@ -17,13 +17,13 @@ git clone https://github.com/rahonalab/corpus_building.git
 Then, build the stanzacuda image:
 
 ```bash
-cd parallelcorpus-tools/stanza-cuda; docker build
+cd building_tools/stanza-cuda; docker build
 ```
 
 1. Once you have a stanzacuda image available on your system, you can create a container:
 
 ```bash
-docker run  -u $(id -u):$(id -g) --gpus all -d -t --name <the_name_of_your_container>           -v <local_path_to_raw_texts>:<mapping_to_container_path> -v <local_path_to_stanza_resources>:/stanza_resources          -v <local_path_to_these_scripts>:/tools verkerklab/stanzacuda:0.5
+docker run  -u $(id -u):$(id -g) --gpus all -d -t --name <the_name_of_your_container>           -v <local_path_to_raw_texts>:<mapping_to_container_path> -v <local_path_to_stanza_resources>:/stanza_resources          -v <local_path_to_these_scripts>:/tools verkerklab/stanzacuda:latest
 ```
 
 2. Create the structure for conllu, metadata and xml files: (optional)
