@@ -48,7 +48,7 @@ def importRSC(file_content):
     #Child must be <s>...</s>
     rsc = []
     for v in vrt:
-        vrtclean = csv.reader(StringIO(v.text),delimiter='\s')
+        vrtclean = csv.reader(StringIO(v.text),delimiter=' ')
         sentence = []
         for t in vrtclean:
             if t:
