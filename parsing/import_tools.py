@@ -48,11 +48,12 @@ def importRSC(file_content):
     #Child must be <s>...</s>
     rsc = []
     for v in vrt:
-        vrtclean = csv.reader(StringIO(v.text),delimiter=' ')
+        vrtclean = StringIO(v.text)
         sentence = []
         for t in vrtclean:
-            if t:
-                sentence.append(t[0])
+            if t and t is not "\n":
+                sentence.append(t.split('\t')[0])
         rsc.append(sentence)
+        print(sentence)
     return rsc,metadata
 
