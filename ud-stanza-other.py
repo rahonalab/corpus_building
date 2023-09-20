@@ -123,14 +123,14 @@ def main():
             #print(df["norm"].astype(str))
         else:
             if args.metadata:
-            '''extract metadata from filename...'''
-            metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
-            lang=Path(filename).stem.split("_")[1]
-            title=Path(filename).stem.split("_")[0]
-            metadata.write("<text id=\""+title+"\" ")
-            metadata.write("origtitle=\""+title+"\" language=\""+lang+"\" ")
-            metadata.write(">")
-            metadata.close()
+                '''extract metadata from filename...'''
+                metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
+                lang=Path(filename).stem.split("_")[1]
+                title=Path(filename).stem.split("_")[0]
+                metadata.write("<text id=\""+title+"\" ")
+                metadata.write("origtitle=\""+title+"\" language=\""+lang+"\" ")
+                metadata.write(">")
+                metadata.close()
             print(corpus+" is currently not supported")
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
