@@ -101,19 +101,11 @@ def main():
     for filename in sorted(glob.glob(args.source+'/*.vrt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)
-        if args.metadata:
-            '''extract metadata from filename...'''
-            metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
-            lang=Path(filename).stem.split("_")[1]
-            title=Path(filename).stem.split("_")[0]
-            metadata.write("<text id=\""+title+"\" ")
-            metadata.write("origtitle=\""+title+"\" language=\""+lang+"\" ")
-            metadata.write(">")
-            metadata.close()
         print("Starting parser...")
         #Leipzig corpora
         if corpus == "leipzig":
             file_content = re.sub(r'\d+\t','',file_content)
+        #RSC corpus
         if corpus == "rsc":
             #RSC is already tokenized and sentence splitted
             nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
@@ -130,6 +122,15 @@ def main():
             parseprepared(nlp,rsc,filename,args.target)
             #print(df["norm"].astype(str))
         else:
+            if args.metadata:
+            '''extract metadata from filename...'''
+            metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
+            lang=Path(filename).stem.split("_")[1]
+            title=Path(filename).stem.split("_")[0]
+            metadata.write("<text id=\""+title+"\" ")
+            metadata.write("origtitle=\""+title+"\" language=\""+lang+"\" ")
+            metadata.write(">")
+            metadata.close()
             print(corpus+" is currently not supported")
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
