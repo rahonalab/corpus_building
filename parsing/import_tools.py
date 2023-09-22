@@ -51,9 +51,8 @@ def importRSC(file_content):
         vrtclean = StringIO(v.text)
         sentence = []
         for t in vrtclean:
-            if t and t is not "\n":
+            if t and t != "\n":
                 sentence.append(t.split('\t')[0])
         rsc.append(sentence)
-        print(sentence)
     return rsc,metadata
 
