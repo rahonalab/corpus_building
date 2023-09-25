@@ -123,7 +123,12 @@ def main():
                 metafile.write(">")
                 metafile.close()
                 print("Parsing "+filename+"\n")
-                parseprepared(nlp,rsc,filename,args.target)
+                if rsc:
+                    parseprepared(nlp,rsc,filename,args.target)
+                else:
+                    print("Document is empty, writing an empty conllu file")
+                    conllu = args.target+Path(filename).stem+".conllu"
+                    open(conllu, 'w').close()                    
                 #print(df["norm"].astype(str))
             else:
                 print(corpus+" is currently not supported")
