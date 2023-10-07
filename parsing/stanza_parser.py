@@ -51,7 +51,7 @@ def preparenlpconf(model,processors):
 def parseciep(nlp,text,filename,target,miniciep):
     ciepf = target+"/"+Path(filename).stem+".conllu"
     '''Select the type of output: Both (yes), only ciep (no), only miniciep (only)'''
-    if miniciep == "yes" or "only":
+    if miniciep:
             #Create mini/ folder if it does not exit
             if not os.path.exists(target+"/"+"mini"+"/"):
                 os.makedirs(target+"/"+"mini"+"/")
@@ -63,16 +63,10 @@ def parseciep(nlp,text,filename,target,miniciep):
                 print("Parsing miniciep+")
                 miniciep = nlp(preparetext(splitciep[0]))
                 CoNLL.write_doc2conll(miniciep,miniciepf)
-            if miniciep == "yes":
-                ciepf = target+"/"+Path(filename).stem+".conllu"
-                print("Parsing full ciep+")
-                ciep = nlp(preparetext(text))
-                CoNLL.write_doc2conll(ciep,ciepf)
-    if miniciep == "no": 
-            print('Parsing only CIEP+')
-            ciepf = target+"/"+Path(filename).stem+".conllu"
-            ciep = nlp(preparetext(text))
-            CoNLL.write_doc2conll(ciep,ciepf)
+    print('Parsing full CIEP+')
+    ciepf = target+"/"+Path(filename).stem+".conllu"
+    ciep = nlp(preparetext(text))
+    CoNLL.write_doc2conll(ciep,ciepf)
 
 
 #...while this other function is generic:

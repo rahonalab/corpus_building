@@ -54,7 +54,7 @@ def build_parser():
     parser.add_argument('-m', '--metadata', required=True, help='Target destination for metadata')
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--processors', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
-    parser.add_argument('-c', '--miniciep', required=False, default="no", help='Create miniciep+? yes/only')
+    parser.add_argument('-c', '--miniciep', required=False, help='Create miniciep+')
 
     return parser
 
