@@ -10,6 +10,7 @@ import collections
 import csv
 import string
 from pathlib import Path
+import stanza
 
 from parsing.stanza_parser import (
     preparenlpconf,
@@ -83,7 +84,8 @@ def main():
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)
         '''Extract metadata'''
-        header = re.findall(r'@.*',file_content)
+        #Handle BOM
+        header = re.findall(r'@.*',file_content.replace('\ufeff', ''))
         try:
             header.remove('@endheader')
         except:

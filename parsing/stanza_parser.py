@@ -2,6 +2,7 @@ from pathlib import Path
 import stanza
 from stanza.utils.conll import CoNLL
 from parsing.clean_text import preparetext
+import os
 """
 
 This program is free software; you can redistribute it and/or
@@ -51,6 +52,9 @@ def parseciep(nlp,text,filename,target,miniciep):
     ciepf = target+"/"+Path(filename).stem+".conllu"
     '''Select the type of output: Both (yes), only ciep (no), only miniciep (only)'''
     if miniciep == "yes" or "only":
+            #Create mini/ folder if it does not exit
+            if not os.path.exists(target+"/"+"mini"+"/"):
+                os.makedirs(target+"/"+"mini"+"/")
             if '===endminiciep+===' in text:
                 print("endminiciep+ string found")
                 '''Split between CIEP+ and miniCIEP+'''
