@@ -26,7 +26,7 @@ from parsing.import_tools import (
     importRSC
 )
 
-
+from parsing.clean_text import preparetext
 
 try:
     import argparse
@@ -105,7 +105,8 @@ def main():
      nlp = stanza.Pipeline(**config, logging_level="DEBUG")
      for filename in sorted(glob.glob(args.source+'/*.txt')):
       #Just parse the file as-is
-      text = open(filename, encoding='utf-8').read() 
+      text = open(filename, encoding='utf-8').read()
+      text = preparetext(text)
       parseother(nlp,text,filename,args.target)
      return
     if corpus == "leipzig":
