@@ -92,48 +92,57 @@ def main():
     config = preparenlpconf(ud,args.processors)
     #Generic conllu
     if corpus == "conllu":
-        for filename in sorted(glob.glob(args.source+'/*.conllu')):
-            print("Reading: "+filename)
-            nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
-            from stanza.utils.conll import CoNLL
-            doc = CoNLL.conll2doc(filename)
-            parseprepared(nlp,doc,filename,args.target)
-    for filename in sorted(glob.glob(args.source+'/*.vrt')):
-        #Check if file already exists
-        if(os.path.isfile(args.target+Path(filename).stem+".conllu")):
-            print(filename+" already parsed, next please...")
+     print("Ok, parsing conllu files...")
+     for filename in sorted(glob.glob(args.source+'/*.conllu')):
+      print("Reading: "+filename)
+      nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
+      from stanza.utils.conll import CoNLL
+      #Import conllu into doc object
+      text = CoNLL.conll2doc(filename)
+      parseprepared(nlp,text,filename,args.target)
+     return
+    if corpus == "txt":
+     nlp = stanza.Pipeline(**config, logging_level="DEBUG")
+     for filename in sorted(glob.glob(args.source+'/*.txt')):
+      #Just parse the file as-is
+      text = open(filename, encoding='utf-8').read() 
+      parseother(nlp,text,filename,args.target)
+     return
+    if corpus == "leipzig":
+     file_content = open(filename, encoding='utf-8').read()
+     #Remove the annoying Leipzig format
+     text = re.sub(r'\d+\t','',file_content)
+     parseother(nlp,text,filename,args.target)
+     return
+    if corpus == "rsc":
+     for filename in sorted(glob.glob(args.source+'/*.vrt')):
+     #Check if file already exists
+      if(os.path.isfile(args.target+Path(filename).stem+".conllu")):
+       print(filename+" already parsed, next please...")
+      else:
+       file_content = open(filename, encoding='utf-8').read()
+       print("Reading: "+filename)
+       print("Starting parser...")
+       #RSC is already tokenized and sentence splitted
+       nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
+       #We overwrite existing metadata as RSC's metadata are better
+       rsc, metadata = importRSC(file_content)
+       '''extract metadata from metadata...'''
+       metafile= open(args.metadata+Path(filename).stem+".metadata","w+")
+       metafile.write("<text ")
+       for k,v in metadata.items():
+        metafile.write(k+"=\""+v+"\""+" ")
+        metafile.write(">")
+        metafile.close()
+        print("Parsing "+filename+"\n")
+        if rsc:
+         parseprepared(nlp,rsc,filename,args.target)
         else:
-            file_content = open(filename, encoding='utf-8').read()
-            print("Reading: "+filename)
-            print("Starting parser...")
-            #Leipzig corpora
-            if corpus == "leipzig":
-                file_content = re.sub(r'\d+\t','',file_content)
-            #RSC corpus
-            if corpus == "rsc":
-                #RSC is already tokenized and sentence splitted
-                nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
-                #We overwrite existing metadata as RSC's metadata are better
-                rsc, metadata = importRSC(file_content)
-                '''extract metadata from metadata...'''
-                metafile= open(args.metadata+Path(filename).stem+".metadata","w+")
-                metafile.write("<text ")
-                for k,v in metadata.items():
-                    metafile.write(k+"=\""+v+"\""+" ")
-                metafile.write(">")
-                metafile.close()
-                print("Parsing "+filename+"\n")
-                if rsc:
-                    parseprepared(nlp,rsc,filename,args.target)
-                else:
-                    print("Document is empty, writing an empty conllu file")
-                    conllu = args.target+Path(filename).stem+".conllu"
-                    open(conllu, 'w').close()                    
-                #print(df["norm"].astype(str))
-            else:
-                print(corpus+" is currently not supported")
-    print("--- %s seconds ---" % (time.time() - start_time))
-    print("Done! Happy corpus-based typological linguistics!\n")
+         print("Document is empty, writing an empty conllu file")
+         conllu = args.target+Path(filename).stem+".conllu"
+       file_content.close()
+      return	                    
+    print(corpus+" is currently not supported")
 
 if __name__ == "__main__":
     main()
