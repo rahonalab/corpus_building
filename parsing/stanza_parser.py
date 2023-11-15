@@ -50,21 +50,28 @@ def preparenlpconf(model,processors):
 #This functions is dedicated to the parsing of CIEP+...
 def parseciep(nlp,text,filename,target,miniciep):
     ciepf = target+"/"+Path(filename).stem+".conllu"
-    '''Select the type of output: Both (yes), only ciep (no), only miniciep (only)'''
     if miniciep:
-            #Create mini/ folder if it does not exit
-            if not os.path.exists(target+"/"+"mini"+"/"):
-                os.makedirs(target+"/"+"mini"+"/")
-            if '===endminiciep+===' in text:
-                print("endminiciep+ string found")
-                '''Split between CIEP+ and miniCIEP+'''
-                splitciep = text.split('===endminiciep+===')
-                miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
-                print("Parsing miniciep+")
-                miniciep = nlp(preparetext(splitciep[0]))
-                CoNLL.write_doc2conll(miniciep,miniciepf)
+     #Create mini/ folder if it does not exit
+     if not os.path.exists(target+"/"+"mini"+"/"):
+      os.makedirs(target+"/"+"mini"+"/")
+     if not os.path.exists(target+"/"+"mid"+"/"):
+      os.makedirs(target+"/"+"mid"+"/")
+     if '===endminiciep+===' in text:
+      print("endminiciep+ string found")
+      '''Split between CIEP+, miniCIEP+ and midCIEP+'''
+      splitciep = text.split('===endminiciep+===')
+      miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
+      midciepf = target+"/"+"mid"+"/"+Path(filename).stem+".conllu"
+      print("Parsing miniciep+")
+      miniciep = nlp(preparetext(splitciep[0]))
+      CoNLL.write_doc2conll(miniciep,miniciepf)
+      print("Parsing midciep+")
+      midciep = nlp(preparetext(splitciep[1]))
+      CoNLL.write_doc2conll(midciep,midciepf)
     print('Parsing full CIEP+')
-    ciepf = target+"/"+Path(filename).stem+".conllu"
+    if not os.path.exists(target+"/"+"full"+"/"):
+     os.makedirs(target+"/"+"full"+"/")
+    ciepf = target+"/full/"+Path(filename).stem+".conllu"
     ciep = nlp(preparetext(text))
     CoNLL.write_doc2conll(ciep,ciepf)
 
