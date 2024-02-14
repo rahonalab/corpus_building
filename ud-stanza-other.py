@@ -65,7 +65,7 @@ def build_parser():
     parser.add_argument('-m', '--metadata', required=False, help='Target destination for metadata (optional)')
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--processors', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
-    parser.add_argument('-c', '--corpus', required=True, type=str, help='Existing corpus: rsc')
+    parser.add_argument('-c', '--corpus', required=True, type=str, help='Available format: txt (just basic cleaning); leipzig (Leipzig Corpora Collection); rsc (RSC vrt format)')
 
     return parser
 
