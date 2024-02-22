@@ -45,6 +45,7 @@ def preparenlpconf(model,processors):
                         'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'download_method': None
+                        'logging_level': "FATAL"
                         })
     return config
 
