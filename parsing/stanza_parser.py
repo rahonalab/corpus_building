@@ -25,6 +25,7 @@ def preparenlpconf(model,processors):
     #Build a simple config
     config= {'processors':processors,'lang':model}
     if model == "mine": 
+            lang = input("Language code")
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")
             mwt = input("Mwt model: ")
@@ -34,7 +35,7 @@ def preparenlpconf(model,processors):
             pretrain = input("Pretrain: ")
             config.update({
                         # Language code for the language to build the Pipeline in
-                        'lang': 'fr',
+                        'lang': lang,
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
 	                    'tokenize_model_path': modelpath+"/tokenize/"+tokenize,
