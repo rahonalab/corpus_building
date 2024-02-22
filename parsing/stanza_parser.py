@@ -35,7 +35,7 @@ def preparenlpconf(model,processors):
             pretrain = input("Pretrain: ")
             config.update({
                         # Language code for the language to build the Pipeline in
-                        #'lang': lang_name,
+                        'lang': 'fr',
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
 	                    'tokenize_model_path': modelpath+"/tokenize/"+tokenize,
