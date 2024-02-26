@@ -44,7 +44,6 @@ def preparenlpconf(model,processors):
 	                    'depparse_model_path': modelpath+"/depparse/"+depparse,
                         'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
-                        'download_method': None,
                         })
     return config
 
