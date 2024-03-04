@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #This function prepares the NLP pipeline
 def preparenlpconf(model,processors):
     #Build a simple config
-    config= {'processors':processors,'lang':model}
+    config= {'lang':model}
     if model == "mine": 
             #lang_name = input("Language code: ")
             modelpath = input("Path to model: ")
@@ -35,7 +35,6 @@ def preparenlpconf(model,processors):
             pretrain = input("Pretrain: ")
             config.update({
                         # Language code for the language to build the Pipeline in
-                        'lang': 'fr',
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
 	                    'tokenize_model_path': modelpath+"/tokenize/"+tokenize,
@@ -49,7 +48,6 @@ def preparenlpconf(model,processors):
     if model == "sq": 
             config.update({
                         # Language code for the language to build the Pipeline in
-                        'lang': 'sq',
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
 	                    'tokenize_model_path': '/corpus/models/stanza/sq/tokenize/sq_nel_tokenizer.pt',
