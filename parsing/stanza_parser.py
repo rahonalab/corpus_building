@@ -25,7 +25,6 @@ def preparenlpconf(model,processors):
     #Build a simple config
     config= {'lang':model,'processors':processors}
     if model == "mine": 
-            #lang_name = input("Language code: ")
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")
             mwt = input("Mwt model: ")
