@@ -54,9 +54,9 @@ def preparenlpconf(model,processors):
                         # You only need model paths if you have a specific model outside of stanza_resources
 	                    'tokenize_model_path': '/corpus/models/stanza/sq/tokenize/sq_nel_tokenizer.pt',
 	                    'mwt_model_path': '/corpus/models/stanza/sq/mwt/sq_nel_mwt_expander.pt',
-	                    'pos_model_path': '/corpus/models/stanza/sq/pos/sq_nel_tagger.pt',
-	                    'lemma_model_path': '/corpus/models/stanza/sq/lemma/sq_nel_lemmatizer.pt',
-	                    'depparse_model_path': '/corpus/models/stanza/sq/depparse/sq_nel_parser.pt',
+	                    'pos_model_path': '/corpus/models/stanza/sq/pos/sq_nel_nocharlm_tagger.pt',
+	                    'lemma_model_path': '/corpus/models/stanza/sq/lemma/sq_nel_nocharlm_lemmatizer.pt',
+	                    'depparse_model_path': '/corpus/models/stanza/sq/depparse/sq_nel_nocharlm_parser_checkpoint.pt',
                         'pos_pretrain_path': '/corpus/models/stanza/sq/pretrain/sq_fasttext.pretrain.pt',
                         'depparse_pretrain_path': '/corpus/models/stanza/sq/pretrain/sq_fasttext.pretrain.pt',
                         })
