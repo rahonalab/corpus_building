@@ -49,7 +49,6 @@ def preparenlpconf(model,processors):
     if model == "sq": 
             config.update({
                         # Language code for the language to build the Pipeline in
-                        'processors': processors,
                         'lang': 'sq',
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
