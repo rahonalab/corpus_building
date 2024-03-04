@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #This function prepares the NLP pipeline
 def preparenlpconf(model,processors):
     #Build a simple config
-    config= {'lang':model}
+    config= {'lang':model,'processors':processors}
     if model == "mine": 
             #lang_name = input("Language code: ")
             modelpath = input("Path to model: ")
