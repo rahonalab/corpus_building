@@ -55,6 +55,7 @@ def build_parser():
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--processors', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
     parser.add_argument('-c', '--miniciep', required=False, help='Create miniciep+')
+    parser.add_argument('-g', '--gpu', required=False, help='Use gpu? True/False')
 
     return parser
 
@@ -70,6 +71,7 @@ def main():
     parser = build_parser()
     args = parser.parse_args()
     ud = args.model
+    gpu = args.gpu
     '''Check arguments'''    
     if check_args(args) is False:
      sys.stderr.write("There was a problem validating the arguments supplied. Please check your input and try again. Exiting...\n")
@@ -79,7 +81,7 @@ def main():
     import platform
     '''Prepare config for the NLP pipeline'''
     config = preparenlpconf(ud,args.processors)
-    nlp = stanza.Pipeline(**config, loggin_level="DEBUG",allow_unknown_language=True)
+    nlp = stanza.Pipeline(**config, loggin_level="DEBUG",allow_unknown_language=True,use_gpu=gpu)
     for filename in sorted(glob.glob(args.source+'/*.txt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)
