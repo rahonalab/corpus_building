@@ -79,7 +79,7 @@ def main():
     import platform
     '''Prepare config for the NLP pipeline'''
     config = preparenlpconf(ud,args.processors)
-    nlp = stanza.Pipeline(processors=args.processors, allow_unknown_language=True, **config)
+    nlp = stanza.Pipeline(processors=args.processors, **config)
     for filename in sorted(glob.glob(args.source+'/*.txt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: "+filename)
