@@ -50,7 +50,6 @@ def preparenlpconf(model,processors):
                         # Language code for the language to build the Pipeline in
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
-                        'lang': 'fr',
 	                    'tokenize_model_path': '/corpus/models/stanza/sq/tokenize/sq_nel_tokenizer.pt',
 	                    'mwt_model_path': '/corpus/models/stanza/sq/mwt/sq_nel_mwt_expander.pt',
 	                    'pos_model_path': '/corpus/models/stanza/sq/pos/sq_nel_nocharlm_tagger.pt',

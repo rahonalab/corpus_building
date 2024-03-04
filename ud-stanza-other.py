@@ -95,14 +95,14 @@ def main():
      print("Ok, parsing conllu files...")
      for filename in sorted(glob.glob(args.source+'/*.conllu')):
       print("Reading: "+filename)
-      nlp = stanza.Pipeline(**config, logging_level="DEBUG", tokenize_pretokenized=True, tokenize_no_ssplit=True)
+      nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, tokenize_pretokenized=True, tokenize_no_ssplit=True)
       from stanza.utils.conll import CoNLL
       #Import conllu into doc object
       text = CoNLL.conll2doc(filename)
       parseprepared(nlp,text,filename,args.target)
      return
     if corpus == "txt":
-     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,download_method=None)
+     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True)
      for filename in sorted(glob.glob(args.source+'/*.txt')):
       #Just parse the file as-is
       text = open(filename, encoding='utf-8').read()
@@ -111,6 +111,7 @@ def main():
      return
     if corpus == "leipzig":
      file_content = open(filename, encoding='utf-8').read()
+     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True)
      #Remove the annoying Leipzig format
      text = re.sub(r'\d+\t','',file_content)
      parseother(nlp,text,filename,args.target)
