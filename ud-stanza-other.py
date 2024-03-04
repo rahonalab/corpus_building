@@ -102,7 +102,7 @@ def main():
       parseprepared(nlp,text,filename,args.target)
      return
     if corpus == "txt":
-     nlp = stanza.Pipeline(**config, logging_level="DEBUG")
+     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,download_method=None)
      for filename in sorted(glob.glob(args.source+'/*.txt')):
       #Just parse the file as-is
       text = open(filename, encoding='utf-8').read()

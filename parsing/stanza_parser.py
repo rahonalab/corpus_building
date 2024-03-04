@@ -39,12 +39,28 @@ def preparenlpconf(model,processors):
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
 	                    'tokenize_model_path': modelpath+"/tokenize/"+tokenize,
+                        'mwt_model_path' : modelpath+"/mwt/"+mwt,
 	                    'pos_model_path': modelpath+"/pos/"+pos,
 	                    'lemma_model_path': modelpath+"/lemma/"+lemma,
 	                    'depparse_model_path': modelpath+"/depparse/"+depparse,
                         'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         })
+    if model == "sq": 
+            config.update({
+                        # Language code for the language to build the Pipeline in
+                        'lang': 'sq',
+                        # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
+                        # You only need model paths if you have a specific model outside of stanza_resources
+	                    'tokenize_model_path': '/corpus/models/stanza/sq/tokenize/sq_nel_tokenizer.pt',
+	                    'mwt_model_path': '/corpus/models/stanza/sq/mwt/sq_nel_mwt_expander.pt',
+	                    'pos_model_path': '/corpus/models/stanza/sq/pos/sq_nel_tagger.pt',
+	                    'lemma_model_path': '/corpus/models/stanza/sq/lemma/sq_nel_lemmatizer.pt',
+	                    'depparse_model_path': '/corpus/models/stanza/sq/depparse/sq_nel_parser.pt',
+                        'pos_pretrain_path': '/corpus/models/stanza/sq/pretrain/sq_fasttext.pretrain.pt',
+                        'depparse_pretrain_path': '/corpus/models/stanza/sq/pretrain/sq_fasttext.pretrain.pt',
+                        })
+
     return config
 
 
