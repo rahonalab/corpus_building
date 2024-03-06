@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
 #This function prepares the NLP pipeline
-def preparenlpconf(model,processors):
+def preparenlpconf(model,pipeline):
     #Build a simple config
-    config= {'lang':model,'processors':processors}
+    config= {'lang':model,'processors':pipeline}
     if model == "mine": 
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")
@@ -44,21 +44,7 @@ def preparenlpconf(model,processors):
                         'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         })
-    if model == "sq": 
-            config.update({
-                        # Language code for the language to build the Pipeline in
-                        # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
-                        # You only need model paths if you have a specific model outside of stanza_resources
-	                    'tokenize_model_path': '/corpus/models/stanza/sq/tokenize/sq_nel_tokenizer.pt',
-	                    'mwt_model_path': '/corpus/models/stanza/sq/mwt/sq_nel_mwt_expander.pt',
-	                    'pos_model_path': '/corpus/models/stanza/sq/pos/sq_nel_nocharlm_tagger.pt',
-	                    'lemma_model_path': '/corpus/models/stanza/sq/lemma/sq_nel_nocharlm_lemmatizer.pt',
-	                    'depparse_model_path': '/corpus/models/stanza/sq/depparse/sq_nel_nocharlm_parser_checkpoint.pt',
-                        'pos_pretrain_path': '/corpus/models/stanza/sq/pretrain/sq_fasttext.pretrain.pt',
-                        'depparse_pretrain_path': '/corpus/models/stanza/sq/pretrain/sq_fasttext.pretrain.pt',
-                        })
-
-    return config
+        return config
 
 
 #This functions is dedicated to the parsing of CIEP+...
