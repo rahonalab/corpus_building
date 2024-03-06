@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 def preparenlpconf(model,pipeline):
     #Build a simple config
     config= {'lang':model,'processors':pipeline}
-    if model == "mine": 
+    if model == "sq": 
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")
             mwt = input("Mwt model: ")
