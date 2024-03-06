@@ -44,7 +44,7 @@ def preparenlpconf(model,pipeline):
                         'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
                         })
-        return config
+    return config
 
 
 #This functions is dedicated to the parsing of CIEP+...
