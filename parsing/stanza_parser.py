@@ -50,7 +50,7 @@ def preparenlpconf(model,pipeline):
 #This functions is dedicated to the parsing of CIEP+...
 def parseciep(nlp,text,filename,target,miniciep):
     ciepf = target+"/"+Path(filename).stem+".conllu"
-    if miniciep:
+    if miniciep == "yes":
      #Create mini/ folder if it does not exit
      if not os.path.exists(target+"/"+"mini"+"/"):
       os.makedirs(target+"/"+"mini"+"/")
@@ -65,6 +65,7 @@ def parseciep(nlp,text,filename,target,miniciep):
       print("Parsing miniciep+")
       miniciep = nlp(preparetext(splitciep[0]))
       CoNLL.write_doc2conll(miniciep,miniciepf)
+      break
       print("Parsing midciep+")
       midciep = nlp(preparetext(splitciep[1]))
       CoNLL.write_doc2conll(midciep,midciepf)
