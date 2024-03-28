@@ -72,9 +72,9 @@ def parseciep(nlp,text,filename,target,miniciep):
       print('Parsing full CIEP+')
       if not os.path.exists(target+"/"+"full"+"/"):
         os.makedirs(target+"/"+"full"+"/")
-        ciepf = target+"/full/"+Path(filename).stem+".conllu"
-        ciep = nlp(preparetext(text))
-        CoNLL.write_doc2conll(ciep,ciepf)
+      ciepf = target+"/full/"+Path(filename).stem+".conllu"
+      ciep = nlp(preparetext(text))
+      CoNLL.write_doc2conll(ciep,ciepf)
 
 
 #...while this other function is generic:
