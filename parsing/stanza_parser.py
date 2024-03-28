@@ -66,9 +66,9 @@ def parseciep(nlp,text,filename,target,miniciep):
       miniciep = nlp(preparetext(splitciep[0]))
       CoNLL.write_doc2conll(miniciep,miniciepf)
     else:
-      print("Parsing midciep+")
-      midciep = nlp(preparetext(splitciep[1]))
-      CoNLL.write_doc2conll(midciep,midciepf)
+      #print("Parsing midciep+")
+      #midciep = nlp(preparetext(splitciep[1]))
+      #CoNLL.write_doc2conll(midciep,midciepf)
       print('Parsing full CIEP+')
       if not os.path.exists(target+"/"+"full"+"/"):
         os.makedirs(target+"/"+"full"+"/")

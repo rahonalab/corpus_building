@@ -60,9 +60,19 @@ def udtext(conllufile):
     conllu = pyconll.load_from_file(conllufile)
     #Get numbers of token
     token = 0
+    nsubj = 0
+    obj = 0
+    iobj = 0
     for sent in conllu:
         token += sent.__len__()
-    return token, conllu.__len__()
+        for tok in sent:
+            if re.findall('nsubj.*', str(tok.deprel)):
+                nsubj += 1
+            if re.findall('obj.*', str(tok.deprel)):
+                obj += 1
+            if re.findall('iobj.*', str(tok.deprel)):
+                iobj += 1
+    return token, conllu.__len__(), nsubj, obj, iobj
     
 def main():
     global debug
@@ -82,41 +92,46 @@ def main():
     csvsentence = open(args.target+"/miniciep+_sentence.csv", 'w', newline='',encoding='utf-8')    
     sentencewriter = csv.writer(csvsentence, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
     sentencewriter.writerow(['Language', '100YearsSolitude', 'AAiW', 'Achterhuis', 'Alchemist', 'NomeRosa', 'Parfum', 'PetitPrince', 'TtLG', 'Zahir', 'Zorba'])
+    csvall = open(args.target+"/miniciep+_stats.csv", 'w', newline='',encoding='utf-8')    
+    statswriter = csv.writer(csvall, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+    statswriter.writerow(['Language', 'Tokens', "Sentences", "nsubj", "obj", "iobj"])
 
     for lang in sorted(glob.iglob(args.source+"/**")):
         texts = []
         #Check if mini/ directory exists
         if os.path.isdir(lang+"/mini"):
             for conllu in sorted(glob.iglob(lang+"/mini/*")):
-                token, sentence = udtext(conllu)
-                text = {"name": os.path.basename(conllu.split("_")[0]), "token": token, "sentence": sentence}
+                token, sentence, nsubj, obj, iobj  = udtext(conllu)
+                text = {"name": os.path.basename(conllu.split("_")[0]), "token": token, "sentence": sentence, "nsubj": nsubj, "obj": obj, "iobj": iobj}
                 texts.append(text)
             #Write token size
-            tokenrow = [os.path.basename(lang),None,None,None,None,None,None,None,None,None,None]
+            tokenrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
-                    tokenrow[1] = text["token"]
+                    tokenrow[1] = int(text["token"])
                 if "AAiW" in text["name"]:
-                    tokenrow[2] = text["token"]
+                    tokenrow[2] = int(text["token"])
                 if "Achter" in text["name"]:
-                    tokenrow[3] = text["token"]
+                    tokenrow[3] = int(text["token"])
                 if "mist" in text["name"]:
-                    tokenrow[4] = text["token"]
+                    tokenrow[4] = int(text["token"])
                 if "Rosa" in text["name"]:
-                    tokenrow[5] = text["token"]
+                    tokenrow[5] = int(text["token"])
                 if "Parfum" in text["name"]:
-                    tokenrow[6] = text["token"]
+                    tokenrow[6] = int(text["token"])
                 if "Prince" in text["name"]:
-                    tokenrow[7] = text["token"]
+                    tokenrow[7] = int(text["token"])
                 if "TtLG" in text["name"]:
-                    tokenrow[8] = text["token"]
+                    tokenrow[8] = int(text["token"])
                 if "Zahir" in text["name"]:
-                    tokenrow[9] = text["token"]
+                    tokenrow[9] = int(text["token"])
                 if "Zorba" in text["name"]:
-                    tokenrow[10] = text["token"]
+                    tokenrow[10] = int(text["token"])
             tokenwriter.writerow(tokenrow)
+            #Get total number of tokens
+            tottokens = sum(tokenrow[1:10])
             #Write sentence size
-            sentencerow = [os.path.basename(lang),None,None,None,None,None,None,None,None,None,None]
+            sentencerow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
                     sentencerow[1] = text["sentence"]
@@ -139,7 +154,84 @@ def main():
                 if "Zorba" in text["name"]:
                     sentencerow[10] = text["sentence"]
             sentencewriter.writerow(sentencerow)
-
+            totsents = sum(sentencerow[1:10])
+            #Get total number of nsubj
+            nsubjrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            for text in texts:
+                if "100" in text["name"]:
+                    nsubjrow[1] = text["nsubj"]
+                if "AAiW" in text["name"]:
+                    nsubjrow[2] = text["nsubj"]
+                if "Achter" in text["name"]:
+                    nsubjrow[3] = text["nsubj"]
+                if "mist" in text["name"]:
+                    nsubjrow[4] = text["nsubj"]
+                if "Rosa" in text["name"]:
+                    nsubjrow[5] = text["nsubj"]
+                if "Parfum" in text["name"]:
+                    nsubjrow[6] = text["nsubj"]
+                if "Prince" in text["name"]:
+                    nsubjrow[7] = text["nsubj"]
+                if "TtLG" in text["name"]:
+                    nsubjrow[8] = text["nsubj"]
+                if "Zahir" in text["name"]:
+                    nsubjrow[9] = text["nsubj"]
+                if "Zorba" in text["name"]:
+                    nsubjrow[10] = text["nsubj"]
+            #nsubjwriter.writerow(nsubjrow)
+            totnsubj = sum(nsubjrow[1:10])
+            #Get total number of obj
+            objrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            for text in texts:
+                if "100" in text["name"]:
+                    objrow[1] = text["obj"]
+                if "AAiW" in text["name"]:
+                    objrow[2] = text["obj"]
+                if "Achter" in text["name"]:
+                    objrow[3] = text["obj"]
+                if "mist" in text["name"]:
+                    objrow[4] = text["obj"]
+                if "Rosa" in text["name"]:
+                    objrow[5] = text["obj"]
+                if "Parfum" in text["name"]:
+                    objrow[6] = text["obj"]
+                if "Prince" in text["name"]:
+                    objrow[7] = text["obj"]
+                if "TtLG" in text["name"]:
+                    objrow[8] = text["obj"]
+                if "Zahir" in text["name"]:
+                    objrow[9] = text["obj"]
+                if "Zorba" in text["name"]:
+                    objrow[10] = text["obj"]
+            #objwriter.writerow(objrow)
+            totobj = sum(objrow[1:10])
+            #Get total number of iobj
+            iobjrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            for text in texts:
+                if "100" in text["name"]:
+                    iobjrow[1] = text["iobj"]
+                if "AAiW" in text["name"]:
+                    iobjrow[2] = text["iobj"]
+                if "Achter" in text["name"]:
+                    iobjrow[3] = text["iobj"]
+                if "mist" in text["name"]:
+                    iobjrow[4] = text["iobj"]
+                if "Rosa" in text["name"]:
+                    iobjrow[5] = text["iobj"]
+                if "Parfum" in text["name"]:
+                    iobjrow[6] = text["iobj"]
+                if "Prince" in text["name"]:
+                    iobjrow[7] = text["iobj"]
+                if "TtLG" in text["name"]:
+                    iobjrow[8] = text["iobj"]
+                if "Zahir" in text["name"]:
+                    iobjrow[9] = text["iobj"]
+                if "Zorba" in text["name"]:
+                    iobjrow[10] = text["iobj"]
+            #iobjwriter.writerow(iobjrow)
+            totiobj = sum(iobjrow[1:10])
+        #Write total stats
+        statswriter.writerow([os.path.basename(lang), tottokens, totsents,totnsubj,totobj,totiobj])
         print("Done with "+lang)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
