@@ -83,6 +83,24 @@ def main():
     '''Prepare config for the NLP pipeline'''
     if args.config is None:
         config = preparenlpconf(ud,args.pipeline)
+    elif args.config == "gsdluw":
+        config = {
+                        # Language code for the language to build the Pipeline in
+                        # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
+                        # You only need model paths if you have a specific model outside of stanza_resources
+                        'processors': 'tokenize,depparse,pos,lemma',
+	                    'tokenize_model_path': "/stanza_resources/ja/tokenize/gsdluw.pt",
+                        #'mwt_model_path' : "",
+	                    'pos_model_path': "/stanza_resources/ja/pos/gsdluw_charlm.pt" ,
+	                    'lemma_model_path': "/stanza_resources/ja/lemma/gsdluw_charlm.pt",
+	                    'depparse_model_path': "/stanza_resources/ja/depparse/gsdluw_charlm.pt" ,
+                        'pos_pretrain_path': "/stanza_resources/ja/pretrain/conll17.pt",
+                        'depparse_pretrain_path': "/stanza_resources/ja/pretrain/conll17.pt",
+			            'pos_charlm_forward_path':"/stanza_resources/ja/forward_charlm/conll17.pt",
+			            'pos_charlm_backward_path':"/stanza_resources/ja/backward_charlm/conll17.pt",
+                        'logging_level': 'DEBUG',
+                        }
+        
     print(config)
     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,use_gpu=gpu)
     for filename in sorted(glob.glob(args.source+'/*.txt')):
