@@ -56,6 +56,7 @@ def build_parser():
     parser.add_argument('-p', '--pipeline', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
     parser.add_argument('-c', '--miniciep', required=False, help='Create miniciep+')
     parser.add_argument('-g', '--gpu', required=False, help='Use gpu? True/False')
+    parser.add_argument('-n', '--config', required=False, help='config file')
 
     return parser
 
@@ -80,7 +81,8 @@ def main():
     start_time = time.time()
     import platform
     '''Prepare config for the NLP pipeline'''
-    config = preparenlpconf(ud,args.pipeline)
+    if args.config is None:
+        config = preparenlpconf(ud,args.pipeline)
     print(config)
     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,use_gpu=gpu)
     for filename in sorted(glob.glob(args.source+'/*.txt')):
