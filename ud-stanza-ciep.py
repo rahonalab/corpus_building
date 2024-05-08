@@ -89,11 +89,11 @@ def main():
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
                         'lang': 'ja',
-                        'processors': 'tokenize,depparse,pos,lemma',
+                        'processors': 'tokenize,depparse,pos,lemma,forward_charlm,backward_charlm',
 	                    'tokenize_model_path': "/stanza_resources/ja/tokenize/gsdluw.pt",
                         #'mwt_model_path' : "",
 	                    'pos_model_path': "/stanza_resources/ja/pos/gsdluw_charlm.pt" ,
-	                    'lemma_model_path': "/stanza_resources/ja/lemma/gsdluw_charlm.pt",
+	                    'lemma_model_path': "/stanza_resources/ja/lemma/gsdluw_nocharlm.pt",
 	                    'depparse_model_path': "/stanza_resources/ja/depparse/gsdluw_charlm.pt" ,
                         'pos_pretrain_path': "/stanza_resources/ja/pretrain/conll17.pt",
                         'depparse_pretrain_path': "/stanza_resources/ja/pretrain/conll17.pt",
