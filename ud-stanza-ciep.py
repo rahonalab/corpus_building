@@ -88,7 +88,7 @@ def main():
                         # Language code for the language to build the Pipeline in
                         # Processor-specific arguments are set with keys "{processor_name}_{argument_name}"
                         # You only need model paths if you have a specific model outside of stanza_resources
-                        'language': 'Japanese',
+                        'lang': 'ja',
                         'processors': 'tokenize,depparse,pos,lemma',
 	                    'tokenize_model_path': "/stanza_resources/ja/tokenize/gsdluw.pt",
                         #'mwt_model_path' : "",
