@@ -98,7 +98,6 @@ def main():
                         'depparse_pretrain_path': "/stanza_resources/ja/pretrain/conll17.pt",
 			            'pos_charlm_forward_path':"/stanza_resources/ja/forward_charlm/conll17.pt",
 			            'pos_charlm_backward_path':"/stanza_resources/ja/backward_charlm/conll17.pt",
-                        'logging_level': 'DEBUG',
                         }
         
     print(config)
