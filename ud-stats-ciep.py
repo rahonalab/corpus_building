@@ -88,10 +88,10 @@ def main():
     start_time = time.time()
     csvtoken = open(args.target+"/miniciep+_token.csv", 'w', newline='',encoding='utf-8')    
     tokenwriter = csv.writer(csvtoken, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-    tokenwriter.writerow(['Language', '100YearsSolitude', 'AAiW', 'Achterhuis', 'Alchemist', 'NomeRosa', 'Parfum', 'PetitPrince', 'TtLG', 'Zahir', 'Zorba'])
+    tokenwriter.writerow(['Language', '100YearsSolitude', 'AAiW', 'Achterhuis', 'Alchemist', 'NomeRosa', 'Parfum', 'PetitPrince', 'TtLG', 'Zahir', 'Zorba','AnimFarm','Archer','Cholera','AnGarda','BealBocht','Cre','Narnia1','Run','Bulle'])
     csvsentence = open(args.target+"/miniciep+_sentence.csv", 'w', newline='',encoding='utf-8')    
     sentencewriter = csv.writer(csvsentence, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-    sentencewriter.writerow(['Language', '100YearsSolitude', 'AAiW', 'Achterhuis', 'Alchemist', 'NomeRosa', 'Parfum', 'PetitPrince', 'TtLG', 'Zahir', 'Zorba'])
+    sentencewriter.writerow(['Language', '100YearsSolitude', 'AAiW', 'Achterhuis', 'Alchemist', 'NomeRosa', 'Parfum', 'PetitPrince', 'TtLG', 'Zahir', 'Zorba','AnimFarm','Archer','Cholera','AnGarda','BealBocht','Cre','Narnia1','Run','Bulle'])
     csvall = open(args.target+"/miniciep+_stats.csv", 'w', newline='',encoding='utf-8')    
     statswriter = csv.writer(csvall, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
     statswriter.writerow(['Language', 'Tokens', "Sentences", "nsubj", "obj", "iobj"])
@@ -105,7 +105,7 @@ def main():
                 text = {"name": os.path.basename(conllu.split("_")[0]), "token": token, "sentence": sentence, "nsubj": nsubj, "obj": obj, "iobj": iobj}
                 texts.append(text)
             #Write token size
-            tokenrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            tokenrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
                     tokenrow[1] = int(text["token"])
@@ -127,11 +127,30 @@ def main():
                     tokenrow[9] = int(text["token"])
                 if "Zorba" in text["name"]:
                     tokenrow[10] = int(text["token"])
+                if "AnimFarm" in text["name"]:
+                    tokenrow[11] = int(text["token"])
+                if "Archer" in text["name"]:
+                    tokenrow[12] = int(text["token"])
+                if "Cholera" in text["name"]:
+                    tokenrow[13] = int(text["token"])
+                if "AnGarda" in text["name"]:
+                    tokenrow[14] = int(text["token"])
+                if "BealBocht" in text["name"]:
+                    tokenrow[15] = int(text["token"])
+                if "Cre" in text["name"]:
+                    tokenrow[16] = int(text["token"])
+                if "Narnia1" in text["name"]:
+                    tokenrow[17] = int(text["token"])
+                if "Run" in text["name"]:
+                    tokenrow[18] = int(text["token"])
+                if "Bulle" in text["name"]:
+                    tokenrow[19] = int(text["token"])
+
             tokenwriter.writerow(tokenrow)
             #Get total number of tokens
-            tottokens = sum(tokenrow[1:10])
+            tottokens = sum(tokenrow[1:19])
             #Write sentence size
-            sentencerow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            sentencerow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
                     sentencerow[1] = text["sentence"]
@@ -153,10 +172,29 @@ def main():
                     sentencerow[9] = text["sentence"]
                 if "Zorba" in text["name"]:
                     sentencerow[10] = text["sentence"]
+                if "AnimFarm" in text["name"]:
+                    sentencerow[11] = int(text["sentence"])
+                if "Archer" in text["name"]:
+                    sentencerow[12] = int(text["sentence"])
+                if "Cholera" in text["name"]:
+                    sentencerow[13] = int(text["sentence"])
+                if "AnGarda" in text["name"]:
+                    sentencerow[14] = int(text["sentence"])
+                if "BealBocht" in text["name"]:
+                    sentencerow[15] = int(text["sentence"])
+                if "Cre" in text["name"]:
+                    sentencerow[16] = int(text["sentence"])
+                if "Narnia1" in text["name"]:
+                    sentencerow[17] = int(text["sentence"])
+                if "Run" in text["name"]:
+                    sentencerow[18] = int(text["sentence"])
+                if "Bulle" in text["name"]:
+                    sentencerow[19] = int(text["sentence"])
+
             sentencewriter.writerow(sentencerow)
-            totsents = sum(sentencerow[1:10])
+            totsents = sum(sentencerow[1:19])
             #Get total number of nsubj
-            nsubjrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            nsubjrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
                     nsubjrow[1] = text["nsubj"]
@@ -178,10 +216,29 @@ def main():
                     nsubjrow[9] = text["nsubj"]
                 if "Zorba" in text["name"]:
                     nsubjrow[10] = text["nsubj"]
+                if "AnimFarm" in text["name"]:
+                    nsubjrow[11] = int(text["nsubj"])
+                if "Archer" in text["name"]:
+                    nsubjrow[12] = int(text["nsubj"])
+                if "Cholera" in text["name"]:
+                    nsubjrow[13] = int(text["nsubj"])
+                if "AnGarda" in text["name"]:
+                    nsubjrow[14] = int(text["nsubj"])
+                if "BealBocht" in text["name"]:
+                    nsubjrow[15] = int(text["nsubj"])
+                if "Cre" in text["name"]:
+                    nsubjrow[16] = int(text["nsubj"])
+                if "Narnia1" in text["name"]:
+                    nsubjrow[17] = int(text["nsubj"])
+                if "Run" in text["name"]:
+                    nsubjrow[18] = int(text["nsubj"])
+                if "Bulle" in text["name"]:
+                    nsubjrow[19] = int(text["nsubj"])
+
             #nsubjwriter.writerow(nsubjrow)
-            totnsubj = sum(nsubjrow[1:10])
+            totnsubj = sum(nsubjrow[1:19])
             #Get total number of obj
-            objrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            objrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
                     objrow[1] = text["obj"]
@@ -203,10 +260,29 @@ def main():
                     objrow[9] = text["obj"]
                 if "Zorba" in text["name"]:
                     objrow[10] = text["obj"]
+                if "AnimFarm" in text["name"]:
+                    objrow[11] = int(text["obj"])
+                if "Archer" in text["name"]:
+                    objrow[12] = int(text["obj"])
+                if "Cholera" in text["name"]:
+                    objrow[13] = int(text["obj"])
+                if "AnGarda" in text["name"]:
+                    objrow[14] = int(text["obj"])
+                if "BealBocht" in text["name"]:
+                    objrow[15] = int(text["obj"])
+                if "Cre" in text["name"]:
+                    objrow[16] = int(text["obj"])
+                if "Narnia1" in text["name"]:
+                    objrow[17] = int(text["obj"])
+                if "Run" in text["name"]:
+                    objrow[18] = int(text["obj"])
+                if "Bulle" in text["name"]:
+                    objrow[19] = int(text["obj"])
+
             #objwriter.writerow(objrow)
-            totobj = sum(objrow[1:10])
+            totobj = sum(objrow[1:19])
             #Get total number of iobj
-            iobjrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0]
+            iobjrow = [os.path.basename(lang),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             for text in texts:
                 if "100" in text["name"]:
                     iobjrow[1] = text["iobj"]
@@ -228,8 +304,27 @@ def main():
                     iobjrow[9] = text["iobj"]
                 if "Zorba" in text["name"]:
                     iobjrow[10] = text["iobj"]
+                if "AnimFarm" in text["name"]:
+                    iobjrow[11] = int(text["iobj"])
+                if "Archer" in text["name"]:
+                    iobjrow[12] = int(text["iobj"])
+                if "Cholera" in text["name"]:
+                    iobjrow[13] = int(text["iobj"])
+                if "AnGarda" in text["name"]:
+                    iobjrow[14] = int(text["iobj"])
+                if "BealBocht" in text["name"]:
+                    iobjrow[15] = int(text["iobj"])
+                if "Cre" in text["name"]:
+                    iobjrow[16] = int(text["iobj"])
+                if "Narnia1" in text["name"]:
+                    iobjrow[17] = int(text["iobj"])
+                if "Run" in text["name"]:
+                    iobjrow[18] = int(text["iobj"])
+                if "Bulle" in text["name"]:
+                    iobjrow[19] = int(text["iobj"])
+
             #iobjwriter.writerow(iobjrow)
-            totiobj = sum(iobjrow[1:10])
+            totiobj = sum(iobjrow[1:19])
         #Write total stats
         statswriter.writerow([os.path.basename(lang), tottokens, totsents,totnsubj,totobj,totiobj])
         print("Done with "+lang)
