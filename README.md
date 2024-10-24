@@ -1,6 +1,7 @@
 # Tools for process corpora
 * ud-stanza-ciep: Parse texts into UD conllu files (CIEP+ version)
 * ud-stanza-other: Parse texts into UD conllu files (everything-but-CIEP+ version)
+* aligner: cross-linguistic sentence aligment using Bert Align (https://github.com/bfsujason/bertalign.git)
 * pipeline/: pipelines for building corpora (may be outdated)
 * parsing/: parser functions
 * export/: export tools
