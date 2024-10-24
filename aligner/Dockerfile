@@ -8,5 +8,7 @@ RUN pip3 install -r https://raw.githubusercontent.com/neulab/awesome-align/refs/
 RUN pip3 install git+https://github.com/bfsujason/bertalign.git
 WORKDIR /tmp
 RUN git clone https://github.com/neulab/awesome-align.git
-RUN python3 /tmp/awesome-aligner/setup.py install
+RUN python3 /tmp/awesome-align/setup.py install
+# Replace gid/uid with your current user's
+RUN RUN groupadd -g 12029 aligner && useradd -m -u 12029 -g aligner aligner
 CMD ["/bin/bash"]
