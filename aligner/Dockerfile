@@ -6,5 +6,7 @@ RUN python3 -m pip install pyconll conllu
 RUN pip3 install -r https://raw.githubusercontent.com/bfsujason/bertalign/main/requirements.txt
 RUN pip3 install -r https://raw.githubusercontent.com/neulab/awesome-align/refs/heads/master/requirements.txt
 RUN pip3 install git+https://github.com/bfsujason/bertalign.git
-RUN pip3 install git+https://github.com/neulab/awesome-align.git
+WORKDIR /tmp
+RUN git clone https://github.com/neulab/awesome-align.git
+RUN python3 /tmp/awesome-aligner/setup.py install
 CMD ["/bin/bash"]
