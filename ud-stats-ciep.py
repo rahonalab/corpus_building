@@ -100,7 +100,8 @@ def main():
         texts = []
         #Check if mini/ directory exists
         if os.path.isdir(lang+"/mini"):
-            for conllu in sorted(glob.iglob(lang+"/mini/*")):
+            for conllu in sorted(glob.iglob(lang+"/mini/*.conllu")):
+                print(conllu)
                 token, sentence, nsubj, obj, iobj  = udtext(conllu)
                 text = {"name": os.path.basename(conllu.split("_")[0]), "token": token, "sentence": sentence, "nsubj": nsubj, "obj": obj, "iobj": iobj}
                 texts.append(text)
