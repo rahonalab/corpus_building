@@ -143,7 +143,7 @@ def main():
             nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, tokenize_no_ssplit=True)
             # Alternate sentence splitting
             parsealtciep(nlp,file_content,filename,args.target,args.miniciep,ud)
-        elif:
+        else:
             parseciep(nlp, file_content, filename, args.target, args.miniciep)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
