@@ -56,3 +56,10 @@ def importRSC(file_content):
         rsc.append(sentence)
     return rsc,metadata
 
+def sentPysbd(lang,text):
+    import pysbd
+    seg = pysbd.Segmenter(language=lang,clean=False)
+    #Sentence split text
+    output = seg.segment(text)
+    return "\n\n".join(output)
+

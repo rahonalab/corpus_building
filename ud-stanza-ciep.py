@@ -12,9 +12,10 @@ import string
 from pathlib import Path
 import stanza
 
+from parsing.import_tools import sentPysbd
 from parsing.stanza_parser import (
     preparenlpconf,
-    load_config
+    load_config,
     parseciep
 )
 
@@ -43,7 +44,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
-USAGE = './ud-stanza-ciep.py -s <source_directory> -t <target_directory> -l <language> -m <metadata_directory> [-h] '
+USAGE = './ud-stanza-ciep.py -s <source_directory> -t <target_directory> -l <language> -m <metadata_directory> -p <alternative sentence splitter> [-h] '
 
 def build_parser():
 
@@ -58,6 +59,7 @@ def build_parser():
     parser.add_argument('-c', '--miniciep', required=False, help='Create miniciep+')
     parser.add_argument('-g', '--gpu', required=False, help='Use gpu? True/False')
     parser.add_argument('-n', '--config', required=False, help='config file')
+    parser.add_argument('-p', '--ssplitter', required=False, help='Alternative sentence splitter')
 
     return parser
 
@@ -105,36 +107,43 @@ def main():
         config = load_config(args.config)
     print(config)
     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,use_gpu=gpu)
+
     for filename in sorted(glob.glob(args.source+'/*.txt')):
         file_content = open(filename, encoding='utf-8').read()
-        print("Reading: "+filename)
+        print("Reading: " + filename)
         '''Extract metadata'''
         #Handle BOM
-        header = re.findall(r'@.*',file_content.replace('\ufeff', ''))
+        header = re.findall(r'@.*', file_content.replace('\ufeff', ''))
         try:
             header.remove('@endheader')
         except:
             pass
-        metadata= open(args.metadata+"/"+Path(filename).stem+".metadata","w+")
-        if header: 
-            title=Path(filename).stem.split("_")[0]
-            metadata.write("<text id=\""+title+"\" ")
+        metadata = open(args.metadata + "/" + Path(filename).stem + ".metadata", "w+")
+        if header:
+            title = Path(filename).stem.split("_")[0]
+            metadata.write("<text id=\"" + title + "\" ")
             for feature in header:
                 value = feature.split('=')
                 try:
-                    metadata.write(re.sub('^@','',value[0].strip())+"=\""+value[1].strip()+"\" ")
+                    metadata.write(re.sub('^@', '', value[0].strip()) + "=\"" + value[1].strip() + "\" ")
                 except:
                     pass
         else:
             '''or extract metadata from filename...'''
-            lang=Path(filename).stem.split("_")[1]
-            title=Path(filename).stem.split("_")[0]
-            metadata.write("<text id=\""+title+"\" ")
-            metadata.write("origtitle=\""+title+"\" language=\""+lang+"\" ")
+            lang = Path(filename).stem.split("_")[1]
+            title = Path(filename).stem.split("_")[0]
+            metadata.write("<text id=\"" + title + "\" ")
+            metadata.write("origtitle=\"" + title + "\" language=\"" + lang + "\" ")
         metadata.write(">")
         metadata.close()
         print("Starting parser...")
-        parseciep(nlp,file_content,filename,args.target,args.miniciep)
+        if args.ssplitter == "pysbd":
+            #Rewrite the NLP pipeline
+            nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, use_gpu=gpu, tokenize_no_ssplit=True)
+            #Alternate sentence splitting
+            file_content = sentPysbd(lang,file_content)
+
+        parseciep(nlp, file_content, filename, args.target, args.miniciep)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
 
