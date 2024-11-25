@@ -1,10 +1,15 @@
 from pathlib import Path
+from pickletools import pyset
+
 import stanza
 from stanza.utils.conll import CoNLL
 from parsing.clean_text import preparetext
 import os
 import json
 from pathlib import Path
+
+from parsing.import_tools import sentPysbd
+
 """
 
 This program is free software; you can redistribute it and/or
@@ -54,7 +59,7 @@ def load_config(infile: Path):
     return config
 
 #This functions is dedicated to the parsing of CIEP+...
-def parseciep(nlp,text,filename,target,miniciep,ssplitter):
+def parseciep(nlp,text,filename,target,miniciep):
     ciepf = target+"/"+Path(filename).stem+".conllu"
     if miniciep == "yes":
      #Create mini/ folder if it does not exit
@@ -79,15 +84,40 @@ def parseciep(nlp,text,filename,target,miniciep,ssplitter):
       if not os.path.exists(target+"/"+"full"+"/"):
         os.makedirs(target+"/"+"full"+"/")
       ciepf = target+"/full/"+Path(filename).stem+".conllu"
-      if ssplitter == "pysbd":
-          print("Ok, using pysbd as an alternative sentence splitter...")
-          # Rewrite the NLP pipeline
-          nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, tokenize_no_ssplit=True)
-          # Alternate sentence splitting
-          text = sentPysbd("ar", text)
       ciep = nlp(preparetext(text))
       CoNLL.write_doc2conll(ciep,ciepf)
 
+def parsealtciep(nlp,text,filename,target,miniciep,lang):
+    ciepf = target+"/"+Path(filename).stem+".conllu"
+    if miniciep == "yes":
+     #Create mini/ folder if it does not exit
+     if not os.path.exists(target+"/"+"mini"+"/"):
+      os.makedirs(target+"/"+"mini"+"/")
+     if not os.path.exists(target+"/"+"mid"+"/"):
+      os.makedirs(target+"/"+"mid"+"/")
+     if '===endminiciep+===' in text:
+      print("endminiciep+ string found")
+      '''Split between CIEP+, miniCIEP+ and midCIEP+'''
+      splitciep = text.split('===endminiciep+===')
+      miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
+      midciepf = target+"/"+"mid"+"/"+Path(filename).stem+".conllu"
+      print("Parsing miniciep+")
+      miniciep = preparetext(splitciep[0])
+      miniciep = sentPysbd(lang, miniciep)
+      miniciepconll = nlp(preparetext(miniciep))
+      CoNLL.write_doc2conll(miniciepconll,miniciepf)
+    else:
+      #print("Parsing midciep+")
+      #midciep = nlp(preparetext(splitciep[1]))
+      #CoNLL.write_doc2conll(midciep,midciepf)
+      print('Parsing full CIEP+')
+      if not os.path.exists(target+"/"+"full"+"/"):
+        os.makedirs(target+"/"+"full"+"/")
+      ciepf = target+"/full/"+Path(filename).stem+".conllu"
+      ciep = preparetext(text)
+      ciep = sentPysbd(lang, ciep)
+      ciepconll = nlp(ciep)
+      CoNLL.write_doc2conll(ciepconll,ciepf)
 
 #...while this other function is generic:
 def parseother(nlp,text,filename,target):

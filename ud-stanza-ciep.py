@@ -16,7 +16,7 @@ from parsing.import_tools import sentPysbd
 from parsing.stanza_parser import (
     preparenlpconf,
     load_config,
-    parseciep
+    parseciep, parsealtciep
 )
 
 try:
@@ -137,7 +137,14 @@ def main():
         metadata.write(">")
         metadata.close()
         print("Starting parser...")
-        parseciep(nlp, file_content, filename, args.target, args.miniciep,args.ssplitter)
+        if args.ssplitter == "pysbd":
+            print("Ok, using pysbd as an alternative sentence splitter...")
+            # Rewrite the NLP pipeline
+            nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, tokenize_no_ssplit=True)
+            # Alternate sentence splitting
+            parsealtciep(nlp,file_content,filename,args.target,args.miniciep,ud)
+        elif:
+            parseciep(nlp, file_content, filename, args.target, args.miniciep)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
 
