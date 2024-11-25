@@ -137,14 +137,7 @@ def main():
         metadata.write(">")
         metadata.close()
         print("Starting parser...")
-        if args.ssplitter == "pysbd":
-            print("Ok, using pysbd as an alternative sentence splitter...")
-            #Rewrite the NLP pipeline
-            nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, use_gpu=gpu, tokenize_no_ssplit=True)
-            #Alternate sentence splitting
-            file_content = sentPysbd(ud,file_content)
-            print(file_content)
-        parseciep(nlp, file_content, filename, args.target, args.miniciep)
+        parseciep(nlp, file_content, filename, args.target, args.miniciep,args.ssplitter)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
 

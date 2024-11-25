@@ -54,7 +54,7 @@ def load_config(infile: Path):
     return config
 
 #This functions is dedicated to the parsing of CIEP+...
-def parseciep(nlp,text,filename,target,miniciep):
+def parseciep(nlp,text,filename,target,miniciep,ssplitter):
     ciepf = target+"/"+Path(filename).stem+".conllu"
     if miniciep == "yes":
      #Create mini/ folder if it does not exit
@@ -79,6 +79,12 @@ def parseciep(nlp,text,filename,target,miniciep):
       if not os.path.exists(target+"/"+"full"+"/"):
         os.makedirs(target+"/"+"full"+"/")
       ciepf = target+"/full/"+Path(filename).stem+".conllu"
+      if ssplitter == "pysbd":
+          print("Ok, using pysbd as an alternative sentence splitter...")
+          # Rewrite the NLP pipeline
+          nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, tokenize_no_ssplit=True)
+          # Alternate sentence splitting
+          text = sentPysbd("ar", text)
       ciep = nlp(preparetext(text))
       CoNLL.write_doc2conll(ciep,ciepf)
 
