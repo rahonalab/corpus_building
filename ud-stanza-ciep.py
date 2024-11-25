@@ -144,6 +144,7 @@ def main():
             #Alternate sentence splitting
             file_content = sentPysbd(ud,file_content)
 
+        print(file_content)
         parseciep(nlp, file_content, filename, args.target, args.miniciep)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
