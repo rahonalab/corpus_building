@@ -3,6 +3,8 @@ import stanza
 from stanza.utils.conll import CoNLL
 from parsing.clean_text import preparetext
 import os
+import json
+from pathlib import Path
 """
 
 This program is free software; you can redistribute it and/or
@@ -21,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
 #This function prepares the NLP pipeline
-def preparenlpconf(model,pipeline):
+def preparenlpconf(model, pipeline):
     #Build a simple config
     config= {'lang':model,'processors':pipeline}
     if model == "sq": 
@@ -46,6 +48,10 @@ def preparenlpconf(model,pipeline):
                         })
     return config
 
+def load_config(infile: Path):
+    with open(infile, encoding="utf-8") as fin:
+        config = json.load(fin)
+    return config
 
 #This functions is dedicated to the parsing of CIEP+...
 def parseciep(nlp,text,filename,target,miniciep):
