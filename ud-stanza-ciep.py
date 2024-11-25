@@ -138,6 +138,7 @@ def main():
         metadata.close()
         print("Starting parser...")
         if args.ssplitter == "pysbd":
+            print("Ok, using pysbd as an alternative sentence splitter...")
             #Rewrite the NLP pipeline
             nlp = stanza.Pipeline(**config, logging_level="DEBUG", allow_unknown_language=True, use_gpu=gpu, tokenize_no_ssplit=True)
             #Alternate sentence splitting
