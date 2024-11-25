@@ -59,7 +59,7 @@ def build_parser():
     parser.add_argument('-c', '--miniciep', required=False, help='Create miniciep+')
     parser.add_argument('-g', '--gpu', required=False, help='Use gpu? True/False')
     parser.add_argument('-n', '--config', required=False, help='config file')
-    parser.add_argument('-p', '--ssplitter', required=False, help='Alternative sentence splitter')
+    parser.add_argument('-x', '--ssplitter', required=False, help='Alternative sentence splitter')
 
     return parser
 
