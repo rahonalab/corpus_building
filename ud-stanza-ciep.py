@@ -14,6 +14,7 @@ import stanza
 
 from parsing.stanza_parser import (
     preparenlpconf,
+    load_config
     parseciep
 )
 
@@ -100,7 +101,8 @@ def main():
 			            'pos_charlm_forward_path':"/stanza_resources/ja/forward_charlm/conll17.pt",
 			            'pos_charlm_backward_path':"/stanza_resources/ja/backward_charlm/conll17.pt",
                         }
-        
+    elif isinstance(args.config, str):     # We expect this to be a path to a JSON file
+        config = load_config(args.config)
     print(config)
     nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,use_gpu=gpu)
     for filename in sorted(glob.glob(args.source+'/*.txt')):
