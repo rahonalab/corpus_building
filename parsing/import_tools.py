@@ -1,14 +1,7 @@
 #!/usr/bin/env python3
-import sys
-import subprocess
-import re
-import glob
-from pathlib import Path
-from tqdm import tqdm
 import os
-import csv
 from io import StringIO
-
+import pysbd
 
 
 try:
@@ -16,8 +9,6 @@ try:
 except ImportError:
     checkpkg.check(['python-argparse'])
 
-import time
-import socket
 
 """
 
@@ -57,7 +48,6 @@ def importRSC(file_content):
     return rsc,metadata
 
 def sentPysbd(lang,text):
-    import pysbd
     seg = pysbd.Segmenter(language=lang,clean=False)
     #Sentence split text
     output = seg.segment(text)

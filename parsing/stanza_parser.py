@@ -1,7 +1,3 @@
-from pathlib import Path
-from pickletools import pyset
-
-import stanza
 from stanza.utils.conll import CoNLL
 from parsing.clean_text import preparetext
 import os
@@ -60,7 +56,6 @@ def load_config(infile: Path):
 
 #This functions is dedicated to the parsing of CIEP+...
 def parseciep(nlp,text,filename,target,miniciep):
-    ciepf = target+"/"+Path(filename).stem+".conllu"
     if miniciep == "yes":
      #Create mini/ folder if it does not exit
      if not os.path.exists(target+"/"+"mini"+"/"):
@@ -74,12 +69,9 @@ def parseciep(nlp,text,filename,target,miniciep):
       miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
       midciepf = target+"/"+"mid"+"/"+Path(filename).stem+".conllu"
       print("Parsing miniciep+")
-      miniciep = nlp(preparetext(splitciep[0]))
-      CoNLL.write_doc2conll(miniciep,miniciepf)
+      miniciept = nlp(preparetext(splitciep[0]))
+      CoNLL.write_doc2conll(miniciept,miniciepf)
     else:
-      #print("Parsing midciep+")
-      #midciep = nlp(preparetext(splitciep[1]))
-      #CoNLL.write_doc2conll(midciep,midciepf)
       print('Parsing full CIEP+')
       if not os.path.exists(target+"/"+"full"+"/"):
         os.makedirs(target+"/"+"full"+"/")
@@ -88,7 +80,6 @@ def parseciep(nlp,text,filename,target,miniciep):
       CoNLL.write_doc2conll(ciep,ciepf)
 
 def parsealtciep(nlp,text,filename,target,miniciep,lang):
-    ciepf = target+"/"+Path(filename).stem+".conllu"
     if miniciep == "yes":
      #Create mini/ folder if it does not exit
      if not os.path.exists(target+"/"+"mini"+"/"):
@@ -102,14 +93,11 @@ def parsealtciep(nlp,text,filename,target,miniciep,lang):
       miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
       midciepf = target+"/"+"mid"+"/"+Path(filename).stem+".conllu"
       print("Parsing miniciep+")
-      miniciep = preparetext(splitciep[0])
-      miniciep = sentPysbd(lang, miniciep)
-      miniciepconll = nlp(preparetext(miniciep))
+      miniciept = preparetext(splitciep[0])
+      miniciept = sentPysbd(lang, miniciept)
+      miniciepconll = nlp(miniciept)
       CoNLL.write_doc2conll(miniciepconll,miniciepf)
     else:
-      #print("Parsing midciep+")
-      #midciep = nlp(preparetext(splitciep[1]))
-      #CoNLL.write_doc2conll(midciep,midciepf)
       print('Parsing full CIEP+')
       if not os.path.exists(target+"/"+"full"+"/"):
         os.makedirs(target+"/"+"full"+"/")

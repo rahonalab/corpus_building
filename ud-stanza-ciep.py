@@ -1,32 +1,18 @@
 #!/usr/bin/env python3
 import sys
-import subprocess
 import re
-import pprint
 import glob
-import os
-import random
-import collections
-import csv
-import string
 from pathlib import Path
 import stanza
+import argparse
 
-from parsing.import_tools import sentPysbd
 from parsing.stanza_parser import (
     preparenlpconf,
     load_config,
     parseciep, parsealtciep
 )
 
-try:
-    import argparse
-except ImportError:
-    checkpkg.check(['python-argparse'])
-
 import time
-import socket
-
 """
 
 This program is free software; you can redistribute it and/or
