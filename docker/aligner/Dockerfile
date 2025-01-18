@@ -10,6 +10,6 @@ WORKDIR /tmp
 RUN git clone https://github.com/neulab/awesome-align.git
 WORKDIR /tmp/awesome-align
 RUN python3 setup.py install
-# Replace gid/uid with your current user's
-RUN groupadd -g 12029 aligner && useradd -m -u 12029 -g aligner aligner
+#replace uid/gid with your current user's
+RUN groupadd -g 12029 parser && useradd -m -u 12029 -g parser parser
 CMD ["/bin/bash"]

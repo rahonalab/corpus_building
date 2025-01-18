@@ -5,7 +5,7 @@ from contextlib import redirect_stdout
 from os.path import basename
 from pathlib import Path
 
-#from bertalign import Bertalign
+from bertalign import Bertalign
 
 USAGE = './sentence-aligner --lang1 --lang2 '
 
