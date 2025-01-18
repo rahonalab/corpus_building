@@ -42,7 +42,7 @@ def main():
                 aligner.align_sents()
                 with open(target+sentsplitfile, 'w') as f:
                     with redirect_stdout(f):
-                        print("scusi")
+                        aligner.print_sents()
 
 if __name__ == "__main__":
     main()
