@@ -56,6 +56,7 @@ def load_config(infile: Path):
 
 #This functions is dedicated to the parsing of CIEP+...
 def parseciep(nlp,text,filename,target,miniciep):
+    print("Parsing"+filename)
     if miniciep == "yes":
      #Create mini/ folder if it does not exit
      if not os.path.exists(target+"/"+"mini"+"/"):
