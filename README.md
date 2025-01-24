@@ -1,11 +1,9 @@
-# Tools for process corpora
-* ud-stanza-ciep: Parse texts into UD conllu files (CIEP+ version)
-* ud-stanza-other: Parse texts into UD conllu files (everything-but-CIEP+ version)
-* aligner: cross-linguistic sentence aligment using Bert Align (https://github.com/bfsujason/bertalign.git)
+# Tools for build corpora
+* parser/ud-stanza-ciep.py: Parse texts into UD conllu files (CIEP+ version)
+* parser/ud-stanza-other.py: Parse texts into UD conllu files (everything-but-CIEP+ version)
+* aligner/: cross-linguistic sentence aligment using Bert Align (https://github.com/bfsujason/bertalign.git)
 * pipeline/: pipelines for building corpora (may be outdated)
-* parsing/: parser functions
-* export/: export tools
-* stanza-cuda/: A Dockerfile for running ud-stanza scripts on GPU, using CUDA
+* docker/: Dockerfiles for running ud-stanza scripts and aligner scripts on GPU, using CUDA
 
 # How to run these scripts using Docker
 
@@ -36,7 +34,7 @@ mkdir -p <corpus>/{conllu,metadata,xml}
 3. Finally, you can run the parsing script with:
 
 ```bash
-docker exec -it <the_name_of_your_container> python3 /tools/ud-stanza-other.py -s <container_path_to_raw_texts> -t <container_path_to_conllu_files> -m <container_path_to_metadata_files> -l <language_model_in_iso6639-1> -p tokenize,lemma,pos,depparse -c <corpus: rsc>
+docker exec -it <the_name_of_your_container> python3 /tools/parser/ud-stanza-other.py -s <container_path_to_raw_texts> -t <container_path_to_conllu_files> -m <container_path_to_metadata_files> -l <language_model_in_iso6639-1> -p tokenize,lemma,pos,depparse -c <corpus: rsc>
 ```
 
 4. You can also export files in xml format, for instance for encoding your conllu corpus in Corpus Workbench. The following command merges the metadata and the conllu files in xml files:
