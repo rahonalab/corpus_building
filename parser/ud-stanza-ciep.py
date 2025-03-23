@@ -9,7 +9,7 @@ import argparse
 from parsing.stanza_parser import (
     preparenlpconf,
     load_config,
-    parseciep, parsealtciep
+    parseciep, parsealtciep, parsealtminiciep, parseminiciep
 )
 
 import time
@@ -42,11 +42,9 @@ def build_parser():
     parser.add_argument('-m', '--metadata', required=True, help='Target destination for metadata')
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--pipeline', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
-    parser.add_argument('-c', '--miniciep', required=False, help='Create miniciep+')
-    parser.add_argument('-g', '--gpu', required=False, help='Use gpu? True/False')
+    parser.add_argument('-c', '--miniciep', action='store_true', help='Create miniciep+')
     parser.add_argument('-n', '--config', required=False, help='config file')
     parser.add_argument('-x', '--ssplitter', required=False, help='Alternative sentence splitter')
-    parser.add_argument('-r', '--resume',required=False, default="no", help='Resume parsing')
 
     return parser
 
@@ -62,7 +60,6 @@ def main():
     parser = build_parser()
     args = parser.parse_args()
     ud = args.model
-    gpu = args.gpu
     '''Check arguments'''    
     if check_args(args) is False:
      sys.stderr.write("There was a problem validating the arguments supplied. Please check your input and try again. Exiting...\n")
@@ -93,8 +90,6 @@ def main():
     elif isinstance(args.config, str):     # We expect this to be a path to a JSON file
         config = load_config(args.config)
     print(config)
-    nlp = stanza.Pipeline(**config, logging_level="DEBUG",allow_unknown_language=True,use_gpu=gpu)
-
     for filename in sorted(glob.glob(args.source+'/*.txt')):
         file_content = open(filename, encoding='utf-8').read()
         print("Reading: " + filename)
@@ -102,14 +97,14 @@ def main():
         #Handle BOM
         header = re.findall(r'@.*', file_content.replace('\ufeff', ''))
         try:
-            header.remove('@endheader')
+         header.remove('@endheader')
         except:
-            pass
+         pass
         metadata = open(args.metadata + "/" + Path(filename).stem + ".metadata", "w+")
         if header:
-            title = Path(filename).stem.split("_")[0]
-            metadata.write("<text id=\"" + title + "\" ")
-            for feature in header:
+         title = Path(filename).stem.split("_")[0]
+         metadata.write("<text id=\"" + title + "\" ")
+         for feature in header:
                 value = feature.split('=')
                 try:
                     metadata.write(re.sub('^@', '', value[0].strip()) + "=\"" + value[1].strip() + "\" ")
@@ -123,15 +118,32 @@ def main():
             metadata.write("origtitle=\"" + title + "\" language=\"" + lang + "\" ")
         metadata.write(">")
         metadata.close()
-        print("Starting parser...")
-        if args.ssplitter == "pysbd":
-            print("Ok, using pysbd as an alternative sentence splitter...")
-            # Rewrite the NLP pipeline
-            nlp = stanza.Pipeline(**config, logging_level="DEBUG", use_gpu = gpu, allow_unknown_language=True, tokenize_no_ssplit=True)
-            # Alternate sentence splitting
-            parsealtciep(nlp, file_content, filename, args.target, args.miniciep, args.model, args.resume)
+        if args.miniciep:
+             if Path(args.target + "/" + "mini" + "/" + Path(filename).stem + ".conllu").exists():
+              print(args.target + "/" + "mini" + "/" + Path(filename).stem + ".conllu" + " already exists, skipping to next book")
+             else:
+              nlp = stanza.Pipeline(**config, allow_unknown_language=True)
+              if args.ssplitter == "pysbd":
+                print("Ok, using pysbd as an alternative sentence splitter...")
+                # Rewrite the NLP pipeline
+                nlp = stanza.Pipeline(**config,allow_unknown_language=True, tokenize_no_ssplit=True)
+                # Alternate sentence splitting
+                parsealtminiciep(nlp, file_content, filename, args.target, args.model)
+              else:
+                parseminiciep(nlp, file_content, filename, args.target)
         else:
-            parseciep(nlp, file_content, filename, args.target, args.miniciep, args.resume)
+              if Path(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu").exists():
+                print(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu" + " already exists, skipping to next book")
+              else:
+               nlp = stanza.Pipeline(**config, allow_unknown_language=True)
+               if args.ssplitter == "pysbd":
+                print("Ok, using pysbd as an alternative sentence splitter...")
+                # Rewrite the NLP pipeline
+                nlp = stanza.Pipeline(**config, allow_unknown_language=True, tokenize_no_ssplit=True)
+                # Alternate sentence splitting
+                parsealtciep(nlp, file_content, filename, args.target, args.model)
+               else:
+                parseciep(nlp, file_content, filename, args.target)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
 

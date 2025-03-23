@@ -54,73 +54,65 @@ def load_config(infile: Path):
         config = json.load(fin)
     return config
 
-#This functions is dedicated to the parsing of CIEP+...
-def parseciep(nlp,text,filename,target,miniciep,resume):
+
+#Distinguish between CIEP+ and miniciep+
+
+def parseminiciep(nlp,text,filename,target):
     print("Parsing "+filename)
-    if miniciep == "yes":
-     #Create mini/ folder if it does not exit
-     if not os.path.exists(target+"/"+"mini"+"/"):
-      os.makedirs(target+"/"+"mini"+"/")
-     if not os.path.exists(target+"/"+"mid"+"/"):
-      os.makedirs(target+"/"+"mid"+"/")
-     if '===endminiciep+===' in text:
-      print("endminiciep+ string found")
-      '''Split between CIEP+, miniCIEP+ and midCIEP+'''
-      splitciep = text.split('===endminiciep+===')
-      miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
-      midciepf = target+"/"+"mid"+"/"+Path(filename).stem+".conllu"
-      if resume == "no" and not Path(miniciepf).exists():
-          print("Parsing miniciep+")
-          miniciept = nlp(preparetext(splitciep[0]))
-          CoNLL.write_doc2conll(miniciept, miniciepf)
-      else:
-          print(miniciepf+" already exists, skipping to next book...")
-    else:
-      if not os.path.exists(target+"/"+"full"+"/"):
-        os.makedirs(target+"/"+"full"+"/")
-      ciepf = target+"/full/"+Path(filename).stem+".conllu"
-      if resume == "no" and not Path(ciepf).exists():
-        print('Parsing full CIEP+')
-        ciep = nlp(preparetext(text))
-        CoNLL.write_doc2conll(ciep,ciepf)
-      else:
-          print(ciepf+" already exists, skipping to next book")
-
-def parsealtciep(nlp,text,filename,target,miniciep,lang,resume):
-
-    if miniciep == "yes":
-     #Create mini/ folder if it does not exit
-     if not os.path.exists(target+"/"+"mini"+"/"):
-      os.makedirs(target+"/"+"mini"+"/")
-     if not os.path.exists(target+"/"+"mid"+"/"):
-      os.makedirs(target+"/"+"mid"+"/")
-     if '===endminiciep+===' in text:
-      print("endminiciep+ string found")
-      '''Split between CIEP+, miniCIEP+ and midCIEP+'''
-      splitciep = text.split('===endminiciep+===')
-      miniciepf = target+"/"+"mini"+"/"+Path(filename).stem+".conllu"
-      midciepf = target+"/"+"mid"+"/"+Path(filename).stem+".conllu"
-      if resume == "no" and not Path(miniciepf).exists():
+    # Create mini/ folder if it does not exit
+    if not os.path.exists(target + "/" + "mini" + "/"):
+        os.makedirs(target + "/" + "mini" + "/")
+    if not os.path.exists(target + "/" + "mid" + "/"):
+        os.makedirs(target + "/" + "mid" + "/")
+    if '===endminiciep+===' in text:
+        print("endminiciep+ string found")
+        '''Split between CIEP+, miniCIEP+ and midCIEP+'''
+        splitciep = text.split('===endminiciep+===')
+        miniciepf = target + "/" + "mini" + "/" + Path(filename).stem + ".conllu"
+        midciepf = target + "/" + "mid" + "/" + Path(filename).stem + ".conllu"
         print("Parsing miniciep+")
+        miniciept = nlp(preparetext(splitciep[0]))
+        CoNLL.write_doc2conll(miniciept, miniciepf)
+
+def parseciep(nlp,text,filename,target):
+    print("Parsing "+filename)
+    if not os.path.exists(target+"/"+"full"+"/"):
+        os.makedirs(target+"/"+"full"+"/")
+    ciepf = target+"/full/"+Path(filename).stem+".conllu"
+    print('Parsing full CIEP+')
+    ciep = nlp(preparetext(text))
+    CoNLL.write_doc2conll(ciep,ciepf)
+
+def parsealtminiciep(nlp,text,filename,target,lang):
+    print("Parsing "+filename)
+    # Create mini/ folder if it does not exit
+    if not os.path.exists(target + "/" + "mini" + "/"):
+        os.makedirs(target + "/" + "mini" + "/")
+    if not os.path.exists(target + "/" + "mid" + "/"):
+        os.makedirs(target + "/" + "mid" + "/")
+    if '===endminiciep+===' in text:
+        print("endminiciep+ string found")
+        '''Split between CIEP+, miniCIEP+ and midCIEP+'''
+        splitciep = text.split('===endminiciep+===')
+        miniciepf = target + "/" + "mini" + "/" + Path(filename).stem + ".conllu"
+        midciepf = target + "/" + "mid" + "/" + Path(filename).stem + ".conllu"
         miniciept = preparetext(splitciep[0])
         miniciept = sentPysbd(lang, miniciept)
+        print("Parsing miniciep+, using pysbd")
         miniciepconll = nlp(miniciept)
-        CoNLL.write_doc2conll(miniciepconll,miniciepf)
-      else:
-        print(miniciepf+" already exists, skipping to next book")
-    else:
-      if not os.path.exists(target + "/" + "full" + "/"):
-       os.makedirs(target + "/" + "full" + "/")
-      ciepf = target+"/full/"+Path(filename).stem+".conllu"
-      if resume == "no" and not Path(ciepf).exists():
-       print('Parsing full CIEP+')
-       ciep = preparetext(text)
-       ciep = sentPysbd(lang, ciep)
-       ciepconll = nlp(ciep)
-       CoNLL.write_doc2conll(ciepconll,ciepf)
-      else:
-        print(ciepf + " already exists, skipping to next book")
+        CoNLL.write_doc2conll(miniciepconll, miniciepf)
 
+
+def parsealtciep(nlp,text,filename,target,lang):
+    print("Parsing " + filename)
+    if not os.path.exists(target + "/" + "full" + "/"):
+       os.makedirs(target + "/" + "full" + "/")
+    ciepf = target+"/full/"+Path(filename).stem+".conllu"
+    ciep = preparetext(text)
+    print('Parsing full CIEP+, using pysbd')
+    ciep = sentPysbd(lang, ciep)
+    ciepconll = nlp(ciep)
+    CoNLL.write_doc2conll(ciepconll,ciepf)
 
 #...while this other function is generic:
 def parseother(nlp,text,filename,target):
