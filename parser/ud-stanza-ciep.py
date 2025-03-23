@@ -46,6 +46,7 @@ def build_parser():
     parser.add_argument('-g', '--gpu', required=False, help='Use gpu? True/False')
     parser.add_argument('-n', '--config', required=False, help='config file')
     parser.add_argument('-x', '--ssplitter', required=False, help='Alternative sentence splitter')
+    parser.add_argument('-r', '--resume',required=False, default="no", help='Resume parsing')
 
     return parser
 
@@ -128,9 +129,9 @@ def main():
             # Rewrite the NLP pipeline
             nlp = stanza.Pipeline(**config, logging_level="DEBUG", use_gpu = gpu, allow_unknown_language=True, tokenize_no_ssplit=True)
             # Alternate sentence splitting
-            parsealtciep(nlp,file_content,filename,args.target,args.miniciep,ud)
+            parsealtciep(nlp, file_content, filename, args.target, args.miniciep, args.model, args.resume)
         else:
-            parseciep(nlp, file_content, filename, args.target, args.miniciep)
+            parseciep(nlp, file_content, filename, args.target, args.miniciep, args.resume)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Done! Happy corpus-based typological linguistics!\n")
 
