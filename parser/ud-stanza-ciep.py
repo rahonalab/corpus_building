@@ -130,7 +130,7 @@ def main():
                 # Alternate sentence splitting
                 parsealtminiciep(nlp, file_content, filename, args.target, args.model)
               else:
-                parseminiciep(nlp, file_content, filename, args.target)
+                (nlp, file_content, filename, args.target)
         else:
               if Path(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu").exists():
                 print(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu" + " already exists, skipping to next book")
