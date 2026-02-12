@@ -29,6 +29,8 @@ def sanitize(s):
 
 def preparetext(file_content):
     '''Clean up nasty characters'''
-    output=sanitize(re.sub(r'(?m)^\@.*\n?',' ',file_content.replace('’', '\'').replace('‘', '\'')).replace('…',' ... ').replace('«',' " ').replace('»',' " ').replace('<BLOCK>',' ').replace('“',' " ').replace('”',' " ').replace('„',' " ').replace('* * *',' . ').replace('‚','\'').replace('','').replace('‬','').replace('‌','').replace('===endminiciep+===','').replace('\ufeff', ''))
+    #output=sanitize(re.sub(r'(?m)^\@.*\n?',' ',file_content.replace('’', '\'').replace('‘', '\'')).replace('…',' ... ').replace('«',' " ').replace('»',' " ').replace('<BLOCK>',' ').replace('“',' " ').replace('”',' " ').replace('„',' " ').replace('* * *',' . ').replace('‚','\'').replace('','').replace('‬','').replace('‌','').replace('===endminiciep+===','').replace('\ufeff', ''))
+    output=sanitize(re.sub(r'(?m)^\@.*\n?',' ',file_content.replace('’', '\'').replace('‘', '\'')).replace('…','...').replace('<BLOCK>',' ').replace('“','"').replace('”','"').replace('„','"').replace('* * *',' . ').replace('‚','\'').replace('‬','').replace('‌','').replace('===endminiciep+===','').replace('\ufeff', ''))
+    output=re.sub(r'[ \t]{2,}', ' ', output)
     return output
 
