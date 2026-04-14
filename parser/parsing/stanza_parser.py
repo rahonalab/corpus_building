@@ -111,6 +111,7 @@ def parsealtciep(nlp,text,filename,target,lang):
     ciep = preparetext(text)
     print('Parsing full CIEP+, using pysbd')
     ciep = doublespacing(ciep)
+    print(ciep)
     ciepconll = nlp(ciep)
     CoNLL.write_doc2conll(ciepconll,ciepf)
 
