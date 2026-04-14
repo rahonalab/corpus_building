@@ -43,7 +43,7 @@ def build_parser():
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--pipeline', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
     parser.add_argument('-c', '--miniciep', action='store_true', help='Create miniciep+')
-    parser.add_argument('--ssplit', action='store_true', help='Text is already sentence-split+: yes/no')
+    parser.add_argument( 'x', '--ssplit', action='store_true', help='Text is already sentence-split+: yes/no')
     parser.add_argument('-n', '--config', required=False, help='config file')
 
     return parser
@@ -126,7 +126,7 @@ def main():
               if args.ssplit == "yes":
                 # Rewrite the NLP pipeline
                 nlp = stanza.Pipeline(**config,allow_unknown_language=True, tokenize_no_ssplit=True)
-                if args.ssplit == "yes":
+                if args.ssplit:
                     #Parse already sentence-split text
                     print("Ok, Parsing already sentence-split text")
                     parsealtminiciep(nlp, file_content, filename, args.target, args.model)
@@ -135,7 +135,7 @@ def main():
                 print(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu" + " already exists, skipping to next book")
               else:
                nlp = stanza.Pipeline(**config, allow_unknown_language=True)
-               if args.ssplit == "yes":
+               if args.ssplit:
                 print("Ok, Parsing already sentence-split text")
                 # Rewrite the NLP pipeline
                 nlp = stanza.Pipeline(**config, allow_unknown_language=True, tokenize_no_ssplit=True)
