@@ -43,7 +43,7 @@ def build_parser():
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--pipeline', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
     parser.add_argument('-c', '--miniciep', action='store_true', help='Create miniciep+')
-    parser.add_argument( 'x', '--ssplit', action='store_true', help='Text is already sentence-split+: yes/no')
+    parser.add_argument('-x', '--ssplit', action='store_true', help='Text is already sentence-split+: yes/no')
     parser.add_argument('-n', '--config', required=False, help='config file')
 
     return parser
