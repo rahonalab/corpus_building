@@ -1,10 +1,10 @@
 from stanza.utils.conll import CoNLL
 from parsing.clean_text import preparetext
+from parsing.clean_text import doublespacing
+
 import os
 import json
 from pathlib import Path
-
-from parsing.import_tools import sentPysbd
 
 """
 
@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 def preparenlpconf(model, pipeline):
     #Build a simple config
     config= {'lang':model,'processors':pipeline}
-    if model == "sq": 
+    if model == "sc":
             modelpath = input("Path to model: ")
             tokenize = input("Tokenize model: ")
             mwt = input("Mwt model: ")
@@ -44,8 +44,8 @@ def preparenlpconf(model, pipeline):
 	                    'pos_model_path': modelpath+"/pos/"+pos,
 	                    'lemma_model_path': modelpath+"/lemma/"+lemma,
 	                    'depparse_model_path': modelpath+"/depparse/"+depparse,
-                        'pos_pretrain_path': modelpath+"/pretrain/"+pretrain,
-                        'depparse_pretrain_path': modelpath+"/pretrain/"+pretrain,
+                        'pos_pretrain_path': pretrain,
+                        'depparse_pretrain_path': pretrain,
                         })
     return config
 
@@ -97,7 +97,7 @@ def parsealtminiciep(nlp,text,filename,target,lang):
         miniciepf = target + "/" + "mini" + "/" + Path(filename).stem + ".conllu"
         midciepf = target + "/" + "mid" + "/" + Path(filename).stem + ".conllu"
         miniciept = preparetext(splitciep[0])
-        miniciept = sentPysbd(lang, miniciept)
+        miniciept = doublespacing(miniciept)
         print("Parsing miniciep+, using pysbd")
         miniciepconll = nlp(miniciept)
         CoNLL.write_doc2conll(miniciepconll, miniciepf)
@@ -110,7 +110,7 @@ def parsealtciep(nlp,text,filename,target,lang):
     ciepf = target+"/full/"+Path(filename).stem+".conllu"
     ciep = preparetext(text)
     print('Parsing full CIEP+, using pysbd')
-    ciep = sentPysbd(lang, ciep)
+    ciep = doublespacing(ciep)
     ciepconll = nlp(ciep)
     CoNLL.write_doc2conll(ciepconll,ciepf)
 

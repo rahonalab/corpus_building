@@ -43,8 +43,8 @@ def build_parser():
     parser.add_argument('-l', '--model', required=True, help='Language model e.g., en for English, zh for Chinese. Use mine for custom models.')
     parser.add_argument('-p', '--pipeline', required=True, type=str, help='NLP pipeline processors, separated by comma e.g. tokenize,lemma,mwt,pos,depparse,ner')
     parser.add_argument('-c', '--miniciep', action='store_true', help='Create miniciep+')
+    parser.add_argument('--ssplit', action='store_true', help='Text is already sentence-split+: yes/no')
     parser.add_argument('-n', '--config', required=False, help='config file')
-    parser.add_argument('-x', '--ssplitter', required=False, help='Alternative sentence splitter')
 
     return parser
 
@@ -69,7 +69,7 @@ def main():
     import platform
     '''Prepare config for the NLP pipeline'''
     if args.config is None:
-        config = preparenlpconf(ud,args.pipeline)
+        config = preparenlpconf(ud,args.pipeline,args.ssplit)
     elif args.config == "gsdluw":
         config = {
                         # Language code for the language to build the Pipeline in
@@ -123,21 +123,20 @@ def main():
               print(args.target + "/" + "mini" + "/" + Path(filename).stem + ".conllu" + " already exists, skipping to next book")
              else:
               nlp = stanza.Pipeline(**config, allow_unknown_language=True)
-              if args.ssplitter == "pysbd":
-                print("Ok, using pysbd as an alternative sentence splitter...")
+              if args.ssplit == "yes":
                 # Rewrite the NLP pipeline
                 nlp = stanza.Pipeline(**config,allow_unknown_language=True, tokenize_no_ssplit=True)
-                # Alternate sentence splitting
-                parsealtminiciep(nlp, file_content, filename, args.target, args.model)
-              else:
-                (nlp, file_content, filename, args.target)
+                if args.ssplit == "yes":
+                    #Parse already sentence-split text
+                    print("Ok, Parsing already sentence-split text")
+                    parsealtminiciep(nlp, file_content, filename, args.target, args.model)
         else:
               if Path(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu").exists():
                 print(args.target + "/" + "full" + "/" + Path(filename).stem + ".conllu" + " already exists, skipping to next book")
               else:
                nlp = stanza.Pipeline(**config, allow_unknown_language=True)
-               if args.ssplitter == "pysbd":
-                print("Ok, using pysbd as an alternative sentence splitter...")
+               if args.ssplit == "yes":
+                print("Ok, Parsing already sentence-split text")
                 # Rewrite the NLP pipeline
                 nlp = stanza.Pipeline(**config, allow_unknown_language=True, tokenize_no_ssplit=True)
                 # Alternate sentence splitting

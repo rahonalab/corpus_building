@@ -34,3 +34,7 @@ def preparetext(file_content):
     output=re.sub(r'[ \t]{2,}', ' ', output)
     return output
 
+def doublespacing(file_content):
+    output = "\n\n".join(file_content.splitlines())
+    return output
+
