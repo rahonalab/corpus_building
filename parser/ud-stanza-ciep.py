@@ -69,7 +69,7 @@ def main():
     import platform
     '''Prepare config for the NLP pipeline'''
     if args.config is None:
-        config = preparenlpconf(ud,args.pipeline,args.ssplit)
+        config = preparenlpconf(ud,args.pipeline)
     elif args.config == "gsdluw":
         config = {
                         # Language code for the language to build the Pipeline in
