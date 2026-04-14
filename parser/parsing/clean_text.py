@@ -1,40 +1,46 @@
-"""
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-"""
-
-
 import unicodedata, re
 
-all_chars = (unichr(i) for i in range(0x110000))
-control_chars = ''.join(map(chr, list(range(0,32)) + list(range(127,160))))
+# FIX: We create the list of control characters but EXCLUDE 10 (\n) and 13 (\r)
+# range(0, 32) includes 0 through 31. We skip 10 and 13.
+control_indices = [i for i in range(0, 32) if i not in (10, 13)] + list(range(127, 160))
+control_chars = ''.join(map(chr, control_indices))
 
 control_char_re = re.compile('[%s]' % re.escape(control_chars))
 
+
 def sanitize(s):
+    # This now removes "invisible" junk but keeps your newlines intact
     return unicodedata.normalize('NFC', control_char_re.sub(' ', s))
 
 
 def preparetext(file_content):
-    '''Clean up nasty characters'''
-    #output=sanitize(re.sub(r'(?m)^\@.*\n?',' ',file_content.replace('’', '\'').replace('‘', '\'')).replace('…',' ... ').replace('«',' " ').replace('»',' " ').replace('<BLOCK>',' ').replace('“',' " ').replace('”',' " ').replace('„',' " ').replace('* * *',' . ').replace('‚','\'').replace('','').replace('‬','').replace('‌','').replace('===endminiciep+===','').replace('\ufeff', ''))
-    output=sanitize(re.sub(r'(?m)^\@.*\n?',' ',file_content.replace('’', '\'').replace('‘', '\'')).replace('…','...').replace('<BLOCK>',' ').replace('“','"').replace('”','"').replace('„','"').replace('* * *',' . ').replace('‚','\'').replace('‬','').replace('‌','').replace('===endminiciep+===','').replace('\ufeff', ''))
-    output=re.sub(r'[ \t]{2,}', ' ', output)
+    '''Clean up nasty characters while preserving structure'''
+    # 1. Handle the @ lines (removes lines starting with @)
+    output = re.sub(r'(?m)^\@.*\n?', '', file_content)
+
+    # 2. Replace curly quotes and special punctuation
+    replacements = {
+        '’': "'", '‘': "'", '‚': "'",
+        '“': '"', '”': '"', '„': '"',
+        '«': '"', '»': '"',
+        '…': '...', '* * *': ' . ',
+        '—': '-', '–': '-'
+    }
+    for old, new in replacements.items():
+        output = output.replace(old, new)
+
+    # 3. Remove specific hidden markers
+    output = output.replace('‬', '').replace('‌', '').replace('===endminiciep+===', '').replace('\ufeff', '')
+
+    # 4. Sanitize (removes non-newline control chars)
+    output = sanitize(output)
+
+    # 5. Collapse multiple horizontal spaces/tabs into one, but leave newlines alone
+    output = re.sub(r'[ \t]{2,}', ' ', output)
+
     return output
+
 
 def doublespacing(file_content):
-    output = "\n\n".join(file_content.splitlines())
-    return output
-
+    # Standardizes to double newlines
+    return "\n\n".join(file_content.splitlines())
