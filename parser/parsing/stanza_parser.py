@@ -98,7 +98,7 @@ def parsealtminiciep(nlp,text,filename,target,lang):
         midciepf = target + "/" + "mid" + "/" + Path(filename).stem + ".conllu"
         miniciept = preparetext(splitciep[0])
         miniciept = doublespacing(miniciept)
-        print("Parsing miniciep+, using pysbd")
+        print("Parsing miniciep+, using already sentence-split text")
         miniciepconll = nlp(miniciept)
         CoNLL.write_doc2conll(miniciepconll, miniciepf)
 
@@ -111,7 +111,6 @@ def parsealtciep(nlp,text,filename,target,lang):
     ciep = preparetext(text)
     print('Parsing full CIEP+, using pysbd')
     ciep = doublespacing(ciep)
-    print(ciep)
     ciepconll = nlp(ciep)
     CoNLL.write_doc2conll(ciepconll,ciepf)
 
