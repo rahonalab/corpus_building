@@ -6,7 +6,7 @@ from pathlib import Path
 import os
 import argparse
 
-from parsing.clean_text import preparetext
+from parser.parsing.clean_text import preparetext
 
 import time
 """
